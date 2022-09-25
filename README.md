@@ -35,3 +35,8 @@ diesel database reset
 ```sh
 cargo build
 ```
+
+## Run
+```sh
+cargo run
+```
