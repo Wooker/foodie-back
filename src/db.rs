@@ -18,12 +18,14 @@ lazy_static! {
         Pool::new(manager).expect("Failed to create db pool")
     };
 }
-pub fn init() {
+pub fn init() -> Result<(), CustomError> {
     lazy_static::initialize(&POOL);
-    let mut conn = connection().expect("Failed to get db connection");
-    conn.run_pending_migrations(MIGRATIONS).unwrap();
+    let mut conn = connection()?;
+    conn.run_pending_migrations(MIGRATIONS).expect("Could not run migrations");
+
+    Ok(())
 }
+
 pub fn connection() -> Result<DbConnection, CustomError> {
-    POOL.get()
-        .map_err(|e| CustomError::new(500, format!("Failed getting db connection: {}", e)))
+    Ok(POOL.get()?)
 }
