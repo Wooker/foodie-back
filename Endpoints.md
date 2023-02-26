@@ -1,18 +1,71 @@
 # Endpoints
 
+## Restaurants
+```txt
+/restaurants
+```
+Data:
+```json
+[
+	{
+		"Address": "Address1",
+		"AveragePrice": "1000",
+		"Description": "Description1",
+		"ID": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+		"Images": "",
+		"Name": "Name1",
+		"OpenHours": "OpenHours1"
+	},
+	{
+		"Address": "Address2",
+		"AveragePrice": "2000",
+		"Description": "Description2",
+		"ID": "344ce739-adb5-41da-8bd2-189db10cad39",
+		"Images": "",
+		"Name": "Name2",
+		"OpenHours": "OpenHours2"
+	}
+]
+```
+
 ## Cities
 ```txt
 /cities
 ```
+Data:
 ```json
 [
-  {
-    "ID": "669980aa-612c-4a8f-8cf9-8bfbbe9c2341",
-    "Name": "Almaty"
-  },
-  {
-    "ID": "74aac223-6baf-4eae-a25b-51e3a03e153e",
-    "Name": "Nur-Sultan"
-  }
+	{
+		"ID": "569b6361-b229-4993-97c7-2ce90957d731",
+		"Name": "Almaty"
+	},
+	{
+		"ID": "67e7c525-461d-45f8-bb84-b53df464d48f",
+		"Name": "Nur-Sultan"
+	}
 ]
+```
+
+## Register
+```txt
+/register
+```
+Body:
+```json
+{
+	"login": "user",
+	"password": "password"
+}
+```
+
+## Login
+```txt
+/login
+```
+Body:
+```json
+{
+	"login": "user",
+	"password": "password"
+}
 ```
