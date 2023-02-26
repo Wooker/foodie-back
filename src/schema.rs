@@ -92,6 +92,13 @@ diesel::table! {
 }
 
 diesel::table! {
+    user_favorites (Login) {
+        Login -> Varchar,
+        RestaurantID -> Uuid,
+    }
+}
+
+diesel::table! {
     user_info (Login) {
         Login -> Varchar,
         Password -> Nullable<Varchar>,
@@ -107,6 +114,7 @@ diesel::joinable!(restaurant_rating -> restaurant_info (RestaurantID));
 diesel::joinable!(restaurant_rating -> user_info (User));
 diesel::joinable!(user_comment -> restaurant_info (RestaurantID));
 diesel::joinable!(user_comment -> user_info (User));
+diesel::joinable!(user_favorites -> restaurant_info (RestaurantID));
 
 diesel::allow_tables_to_appear_in_same_query!(
     city,
@@ -118,5 +126,6 @@ diesel::allow_tables_to_appear_in_same_query!(
     restaurant_rating,
     restaurant_tables,
     user_comment,
+    user_favorites,
     user_info,
 );

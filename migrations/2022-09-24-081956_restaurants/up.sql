@@ -17,3 +17,9 @@ CREATE TABLE "restaurant_location" (
 );
 
 ALTER TABLE "restaurant_location" ADD FOREIGN KEY ("RestaurantID") REFERENCES "restaurant_info" ("ID");
+
+INSERT INTO restaurant_info VALUES
+('85d436f9-3500-4a4b-abea-840fd5e044ec', 'Name1', 'Description1', 'Address1', 'OpenHours1', 1000, ''),
+('344ce739-adb5-41da-8bd2-189db10cad39', 'Name2', 'Description2', 'Address2', 'OpenHours2', 2000, ''),
+('4d237a1c-0fd0-4f4a-b395-04b4468ecb14', 'Name3', 'Description3', 'Address3', 'OpenHours3', 3000, '')
+;

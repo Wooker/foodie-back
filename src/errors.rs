@@ -5,5 +5,7 @@ pub enum CustomError {
     #[error("Database execution error: ")]
     DbExecution(#[from] diesel::result::Error),
     #[error("IO Error: ")]
-    IO(#[from] std::io::Error)
+    IO(#[from] std::io::Error),
+    #[error("Wrong password")]
+    PasswordMismatch
 }

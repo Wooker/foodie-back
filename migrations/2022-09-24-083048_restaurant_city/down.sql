@@ -1,2 +1,2 @@
 DROP TABLE "city";
-DROP TABLE "restaurant"."city";
+DROP TABLE "restaurant_city";

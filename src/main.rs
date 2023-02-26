@@ -67,6 +67,21 @@ async fn register(user_info: web::Json<UserInfo>) -> impl Responder {
     }
 }
 
+
+#[post("/login")]
+async fn login_service(user_info: web::Json<UserInfo>) -> impl Responder {
+    let user = user_info.into_inner();
+    match UserInfo::check(user) {
+        Ok(()) =>  actix_web::HttpResponse::Ok().finish(),
+        Err(e) => {
+            let error_message = serde_json::json!({
+                "error": e.to_string()
+            });
+            return actix_web::HttpResponse::InternalServerError().json(error_message)
+        }
+    }
+}
+
 #[actix_web::main] // or #[tokio::main]
 async fn main() -> Result<(), CustomError> {
     dotenv().ok();
@@ -80,6 +95,7 @@ async fn main() -> Result<(), CustomError> {
             //.service(cuisine)
             .service(shirin)
             .service(register)
+            .service(login_service)
     })
     .bind(("127.0.0.1", 8088))?
     .run()

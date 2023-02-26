@@ -10,7 +10,7 @@ use crate::{
     schema::user_info::dsl::*,
 };
 
-#[derive(Debug, Serialize, Deserialize, Insertable, Queryable)]
+#[derive(Debug, Serialize, Deserialize, Insertable, Queryable, Selectable)]
 #[diesel(table_name = user_info)]
 pub struct UserInfo {
     #[serde(rename = "login")]
@@ -31,5 +31,16 @@ impl UserInfo {
             .execute(&mut conn)?;
 
         Ok(user.Login)
+    }
+
+    pub fn check(user: UserInfo) -> Result<(), CustomError> {
+        let mut conn = connection()?;
+        let user_db = user_info.filter(Login.eq(user.Login)).first::<UserInfo>(&mut conn).unwrap();
+
+        if user_db.Password.eq(&user.Password) {
+            Ok(())
+        } else {
+            Err(CustomError::PasswordMismatch)
+        }
     }
 }
