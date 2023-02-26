@@ -2,7 +2,7 @@
 #![allow(dead_code)]
 #![allow(non_snake_case)]
 
-use uuid::Uuid;
+//use uuid::Uuid;
 use dotenv::dotenv;
 use actix_web::{get, post, web, App, HttpServer, Responder};
 
@@ -17,7 +17,7 @@ use models::{
     city::City,
     user_info::UserInfo,
     restaurant_info::RestaurantInfo,
-    restaurant_cuisine::RestaurantCuisine
+    //restaurant_category::RestaurantCategory
 };
 
 #[get("/shirin")]
@@ -37,11 +37,13 @@ async fn restaurants() -> impl Responder {
     serde_json::to_string(&result)
 }
 
+/*
 #[get("/cuisine/{restaurant_id}")]
 async fn cuisine(restaurant_id: web::Path<String>) -> impl Responder {
     let result = RestaurantCuisine::of_restaurant(Uuid::parse_str(restaurant_id.as_str()).unwrap()).unwrap();
     serde_json::to_string(&result)
 }
+*/
 
 #[post("/register")]
 async fn register(user_info: web::Json<UserInfo>) -> impl Responder {
@@ -75,7 +77,7 @@ async fn main() -> Result<(), CustomError> {
         App::new()
             .service(cities)
             .service(restaurants)
-            .service(cuisine)
+            //.service(cuisine)
             .service(shirin)
             .service(register)
     })

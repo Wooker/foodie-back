@@ -1,20 +1,12 @@
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Serialize, Deserialize, diesel_derive_enum::DbEnum)]
-#[DieselTypePath = "crate::schema::sql_types::Cuisine"]
+#[DieselTypePath = "crate::schema::sql_types::Category"]
 #[DbValueStyle = "PascalCase"]
-pub enum CuisineType {
+pub enum CategoryType {
     European,
     Japanese,
     Chinese,
-}
-
-#[derive(Debug, Serialize, Deserialize, diesel_derive_enum::DbEnum)]
-#[DieselTypePath = "crate::schema::sql_types::Foodtype"]
-#[DbValueStyle = "PascalCase"]
-pub enum FoodType {
-    Fastfood,
-    Ramen
 }
 
 #[derive(Debug, Serialize, Deserialize, diesel_derive_enum::DbEnum)]
