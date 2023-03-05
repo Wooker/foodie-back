@@ -14,14 +14,14 @@ use crate::{
 #[diesel(table_name = user_info)]
 pub struct UserInfo {
     #[serde(rename = "login")]
-    Login: String,
+    id: String,
     #[serde(rename = "password")]
-    Password: Option<String>,
+    password: Option<String>,
 }
 
 impl UserInfo {
     pub fn password_empty(&self) -> bool {
-        self.Password.is_none()
+        self.password.is_none()
     }
 
     pub fn register(user: UserInfo) -> Result<String, CustomError> {
@@ -30,14 +30,14 @@ impl UserInfo {
             .values(&user)
             .execute(&mut conn)?;
 
-        Ok(user.Login)
+        Ok(user.id)
     }
 
     pub fn check(user: UserInfo) -> Result<(), CustomError> {
         let mut conn = connection()?;
-        let user_db = user_info.filter(Login.eq(user.Login)).first::<UserInfo>(&mut conn).unwrap();
+        let user_db = user_info.filter(id.eq(user.id)).first::<UserInfo>(&mut conn)?;
 
-        if user_db.Password.eq(&user.Password) {
+        if user_db.password.eq(&user.password) {
             Ok(())
         } else {
             Err(CustomError::PasswordMismatch)

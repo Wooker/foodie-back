@@ -1,10 +1,10 @@
 CREATE TABLE "user_favorites" (
-  "Login" VARCHAR(30),
-  "RestaurantID" uuid NOT NULL,
-  PRIMARY KEY ("Login")
+  "user_info_id" VARCHAR(30),
+  "restaurant_info_id" uuid NOT NULL,
+  PRIMARY KEY ("user_info_id")
 );
 
-ALTER TABLE "user_favorites" ADD FOREIGN KEY ("RestaurantID") REFERENCES "restaurant_info" ("ID");
+ALTER TABLE "user_favorites" ADD FOREIGN KEY ("restaurant_info_id") REFERENCES "restaurant_info" ("id");
 
 INSERT INTO user_favorites VALUES
 ('user1', '85d436f9-3500-4a4b-abea-840fd5e044ec'),

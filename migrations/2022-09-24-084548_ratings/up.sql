@@ -1,9 +1,9 @@
 CREATE TABLE "restaurant_rating" (
-  "RestaurantID" uuid,
-  "User" varchar(30),
-  "Rating" int2 NOT NULL,
-  PRIMARY KEY ("RestaurantID", "User")
+  "restaurant_info_id" uuid,
+  "user_info_id" varchar(30),
+  "rating" int2 NOT NULL,
+  PRIMARY KEY ("restaurant_info_id", "user_info_id")
 );
 
-ALTER TABLE "restaurant_rating" ADD FOREIGN KEY ("RestaurantID") REFERENCES "restaurant_info" ("ID");
-ALTER TABLE "restaurant_rating" ADD FOREIGN KEY ("User") REFERENCES "user_info" ("Login");
+ALTER TABLE "restaurant_rating" ADD FOREIGN KEY ("restaurant_info_id") REFERENCES "restaurant_info" ("id");
+ALTER TABLE "restaurant_rating" ADD FOREIGN KEY ("user_info_id") REFERENCES "user_info" ("id");

@@ -11,9 +11,9 @@ pub mod sql_types {
 }
 
 diesel::table! {
-    city (ID) {
-        ID -> Uuid,
-        Name -> Varchar,
+    city (id) {
+        id -> Uuid,
+        name -> Varchar,
     }
 }
 
@@ -21,53 +21,53 @@ diesel::table! {
     use diesel::sql_types::*;
     use super::sql_types::Category;
 
-    restaurant_category (RestaurantID, CategoryType) {
-        RestaurantID -> Uuid,
-        CategoryType -> Category,
+    restaurant_category (restaurant_info_id, category_type) {
+        restaurant_info_id -> Uuid,
+        category_type -> Category,
     }
 }
 
 diesel::table! {
-    restaurant_city (RestaurantID, CityID) {
-        RestaurantID -> Uuid,
-        CityID -> Uuid,
+    restaurant_city (restaurant_info_id, city_id) {
+        restaurant_info_id -> Uuid,
+        city_id -> Uuid,
     }
 }
 
 diesel::table! {
-    restaurant_info (ID) {
-        ID -> Uuid,
-        Name -> Varchar,
-        Description -> Text,
-        Address -> Varchar,
-        OpenHours -> Varchar,
-        AveragePrice -> Nullable<Numeric>,
-        Images -> Nullable<Text>,
+    restaurant_info (id) {
+        id -> Uuid,
+        name -> Varchar,
+        description -> Text,
+        address -> Varchar,
+        openHours -> Varchar,
+        averagePrice -> Nullable<Numeric>,
+        images -> Nullable<Text>,
     }
 }
 
 diesel::table! {
-    restaurant_location (RestaurantID) {
-        RestaurantID -> Uuid,
+    restaurant_location (restaurant_info_id) {
+        restaurant_info_id -> Uuid,
         longitude -> Nullable<Float8>,
         latitude -> Nullable<Float8>,
     }
 }
 
 diesel::table! {
-    restaurant_menu (RestaurantID) {
-        RestaurantID -> Uuid,
-        FoodName -> Nullable<Varchar>,
-        Price -> Nullable<Numeric>,
-        Description -> Nullable<Text>,
+    restaurant_menu (restaurant_info_id) {
+        restaurant_info_id -> Uuid,
+        food_name -> Nullable<Varchar>,
+        price -> Nullable<Numeric>,
+        description -> Nullable<Text>,
     }
 }
 
 diesel::table! {
-    restaurant_rating (RestaurantID, User) {
-        RestaurantID -> Uuid,
-        User -> Varchar,
-        Rating -> Int2,
+    restaurant_rating (restaurant_info_id, user_info_id) {
+        restaurant_info_id -> Uuid,
+        user_info_id -> Varchar,
+        rating -> Int2,
     }
 }
 
@@ -84,37 +84,37 @@ diesel::table! {
 }
 
 diesel::table! {
-    user_comment (RestaurantID, User) {
-        RestaurantID -> Uuid,
-        User -> Varchar,
-        Comment -> Text,
+    user_comment (restaurant_info_id, user_info_id) {
+        restaurant_info_id -> Uuid,
+        user_info_id -> Varchar,
+        comment -> Text,
     }
 }
 
 diesel::table! {
-    user_favorites (Login) {
-        Login -> Varchar,
-        RestaurantID -> Uuid,
+    user_favorites (user_info_id) {
+        user_info_id -> Varchar,
+        restaurant_info_id -> Uuid,
     }
 }
 
 diesel::table! {
-    user_info (Login) {
-        Login -> Varchar,
-        Password -> Nullable<Varchar>,
+    user_info (id) {
+        id -> Varchar,
+        password -> Nullable<Varchar>,
     }
 }
 
-diesel::joinable!(restaurant_category -> restaurant_info (RestaurantID));
-diesel::joinable!(restaurant_city -> city (CityID));
-diesel::joinable!(restaurant_city -> restaurant_info (RestaurantID));
-diesel::joinable!(restaurant_location -> restaurant_info (RestaurantID));
-diesel::joinable!(restaurant_menu -> restaurant_info (RestaurantID));
-diesel::joinable!(restaurant_rating -> restaurant_info (RestaurantID));
-diesel::joinable!(restaurant_rating -> user_info (User));
-diesel::joinable!(user_comment -> restaurant_info (RestaurantID));
-diesel::joinable!(user_comment -> user_info (User));
-diesel::joinable!(user_favorites -> restaurant_info (RestaurantID));
+diesel::joinable!(restaurant_category -> restaurant_info (restaurant_info_id));
+diesel::joinable!(restaurant_city -> city (city_id));
+diesel::joinable!(restaurant_city -> restaurant_info (restaurant_info_id));
+diesel::joinable!(restaurant_location -> restaurant_info (restaurant_info_id));
+diesel::joinable!(restaurant_menu -> restaurant_info (restaurant_info_id));
+diesel::joinable!(restaurant_rating -> restaurant_info (restaurant_info_id));
+diesel::joinable!(restaurant_rating -> user_info (user_info_id));
+diesel::joinable!(user_comment -> restaurant_info (restaurant_info_id));
+diesel::joinable!(user_comment -> user_info (user_info_id));
+diesel::joinable!(user_favorites -> restaurant_info (restaurant_info_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     city,

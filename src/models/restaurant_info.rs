@@ -8,20 +8,21 @@ use bigdecimal::BigDecimal;
 use crate::{
     db::connection,
     errors::CustomError,
+    schema::restaurant_info,
     schema::restaurant_info::dsl::*,
 };
 
 
-#[derive(Debug, Serialize, Deserialize, Queryable)]
+#[derive(Debug, PartialEq, Identifiable, Selectable, Serialize, Deserialize, Queryable)]
 #[diesel(table_name = restaurant_info)]
 pub struct RestaurantInfo {
-    ID: uuid::Uuid,
-    Name: String,
-    Description: String,
-    Address: String,
-    OpenHours: String,
-    AveragePrice: Option<BigDecimal>,
-    Images: Option<String>,
+    id: uuid::Uuid,
+    name: String,
+    description: String,
+    address: String,
+    openHours: String,
+    averagePrice: Option<BigDecimal>,
+    images: Option<String>,
 }
 
 impl RestaurantInfo {

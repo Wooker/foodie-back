@@ -1,6 +1,6 @@
 CREATE TABLE "user_info" (
-  "Login" varchar(30) PRIMARY KEY,
-  "Password" varchar(20)
+  "id" varchar(30) PRIMARY KEY,
+  "password" varchar(20)
 );
 
 INSERT INTO user_info VALUES

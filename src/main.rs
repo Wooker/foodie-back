@@ -17,6 +17,7 @@ use models::{
     city::City,
     user_info::UserInfo,
     restaurant_info::RestaurantInfo,
+    restaurant_category::RestaurantCategory,
     //restaurant_category::RestaurantCategory
 };
 
@@ -37,13 +38,19 @@ async fn restaurants() -> impl Responder {
     serde_json::to_string(&result)
 }
 
-/*
-#[get("/cuisine/{restaurant_id}")]
-async fn cuisine(restaurant_id: web::Path<String>) -> impl Responder {
-    let result = RestaurantCuisine::of_restaurant(Uuid::parse_str(restaurant_id.as_str()).unwrap()).unwrap();
-    serde_json::to_string(&result)
+#[get("/categories")]
+async fn categories() -> impl Responder {
+    let result = RestaurantCategory::get_all().unwrap();
+    let mut json: Vec<serde_json::Value> = Vec::new();
+    for (category, ids) in result.iter() {
+        json.push(serde_json::json!({
+            "category": category,
+            "restaurants": ids
+        }));
+    }
+
+    actix_web::HttpResponse::Ok().json(json)
 }
-*/
 
 #[post("/register")]
 async fn register(user_info: web::Json<UserInfo>) -> impl Responder {
@@ -96,6 +103,7 @@ async fn main() -> Result<(), CustomError> {
             .service(shirin)
             .service(register)
             .service(login_service)
+            .service(categories)
     })
     .bind(("127.0.0.1", 8088))?
     .run()

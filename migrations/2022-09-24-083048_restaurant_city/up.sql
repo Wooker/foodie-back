@@ -1,16 +1,16 @@
 CREATE TABLE "city" (
-  "ID" uuid PRIMARY KEY NOT NULL,
-  "Name" varchar(20) NOT NULL
+  "id" uuid PRIMARY KEY NOT NULL,
+  "name" varchar(20) NOT NULL
 );
 
 CREATE TABLE "restaurant_city" (
-  "RestaurantID" uuid,
-  "CityID" uuid NOT NULL,
-  PRIMARY KEY ("RestaurantID", "CityID")
+  "restaurant_info_id" uuid,
+  "city_id" uuid NOT NULL,
+  PRIMARY KEY ("restaurant_info_id", "city_id")
 );
 
-ALTER TABLE "restaurant_city" ADD FOREIGN KEY ("RestaurantID") REFERENCES "restaurant_info" ("ID");
-ALTER TABLE "restaurant_city" ADD FOREIGN KEY ("CityID") REFERENCES "city" ("ID");
+ALTER TABLE "restaurant_city" ADD FOREIGN KEY ("restaurant_info_id") REFERENCES "restaurant_info" ("id");
+ALTER TABLE "restaurant_city" ADD FOREIGN KEY ("city_id") REFERENCES "city" ("id");
 
 INSERT INTO city VALUES
 	(gen_random_uuid(), 'Almaty'),

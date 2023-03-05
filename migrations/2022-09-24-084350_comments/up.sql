@@ -1,9 +1,9 @@
 CREATE TABLE "user_comment" (
-  "RestaurantID" uuid,
-  "User" varchar(30),
-  "Comment" text NOT NULL,
-  PRIMARY KEY ("RestaurantID", "User")
+  "restaurant_info_id" uuid,
+  "user_info_id" varchar(30),
+  "comment" text NOT NULL,
+  PRIMARY KEY ("restaurant_info_id", "user_info_id")
 );
 
-ALTER TABLE "user_comment" ADD FOREIGN KEY ("RestaurantID") REFERENCES "restaurant_info" ("ID");
-ALTER TABLE "user_comment" ADD FOREIGN KEY ("User") REFERENCES "user_info" ("Login");
+ALTER TABLE "user_comment" ADD FOREIGN KEY ("restaurant_info_id") REFERENCES "restaurant_info" ("id");
+ALTER TABLE "user_comment" ADD FOREIGN KEY ("user_info_id") REFERENCES "user_info" ("id");

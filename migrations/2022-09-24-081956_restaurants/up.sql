@@ -1,22 +1,22 @@
 CREATE SCHEMA "restaurant";
 
 CREATE TABLE "restaurant_info" (
-  "ID" uuid PRIMARY KEY,
-  "Name" varchar(20) NOT NULL,
-  "Description" text NOT NULL,
-  "Address" varchar(30) NOT NULL,
-  "OpenHours" varchar(10) NOT NULL,
-  "AveragePrice" decimal,
-  "Images" text
+  "id" uuid PRIMARY KEY,
+  "name" varchar(20) NOT NULL,
+  "description" text NOT NULL,
+  "address" varchar(30) NOT NULL,
+  "openHours" varchar(10) NOT NULL,
+  "averagePrice" decimal,
+  "images" text
 );
 
 CREATE TABLE "restaurant_location" (
-  "RestaurantID" uuid PRIMARY KEY,
+  "restaurant_info_id" uuid PRIMARY KEY,
   "longitude" float,
   "latitude" float
 );
 
-ALTER TABLE "restaurant_location" ADD FOREIGN KEY ("RestaurantID") REFERENCES "restaurant_info" ("ID");
+ALTER TABLE "restaurant_location" ADD FOREIGN KEY ("restaurant_info_id") REFERENCES "restaurant_info" ("id");
 
 INSERT INTO restaurant_info VALUES
 ('85d436f9-3500-4a4b-abea-840fd5e044ec', 'Name1', 'Description1', 'Address1', 'OpenHours1', 1000, ''),
