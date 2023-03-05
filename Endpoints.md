@@ -2,7 +2,7 @@
 
 ## Restaurants
 ```txt
-/restaurants
+GET /restaurants
 ```
 Data:
 ```json
@@ -30,7 +30,7 @@ Data:
 
 ## Cities
 ```txt
-/cities
+GET /cities
 ```
 Data:
 ```json
@@ -48,7 +48,7 @@ Data:
 
 ## Register
 ```txt
-/register
+POST /register
 ```
 Body:
 ```json
@@ -60,7 +60,7 @@ Body:
 
 ## Login
 ```txt
-/login
+POST /login
 ```
 Body:
 ```json
@@ -68,4 +68,36 @@ Body:
 	"login": "user",
 	"password": "password"
 }
+```
+## Categories
+```txt
+GET /categories
+```
+Data:
+```json
+[
+  {
+    "category": "FastFood",
+    "restaurants": [
+      {
+        "address": "Address2",
+        "averagePrice": "2000",
+        "description": "Description2",
+        "id": "344ce739-adb5-41da-8bd2-189db10cad39",
+        "images": "",
+        "name": "Name2",
+        "openHours": "OpenHours2"
+      },
+      {
+        "address": "Address3",
+        "averagePrice": "3000",
+        "description": "Description3",
+        "id": "4d237a1c-0fd0-4f4a-b395-04b4468ecb14",
+        "images": "",
+        "name": "Name3",
+        "openHours": "OpenHours3"
+      }
+    ]
+  }
+]
 ```
