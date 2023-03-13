@@ -8,22 +8,22 @@ Data:
 ```json
 [
 	{
-		"Address": "Address1",
-		"AveragePrice": "1000",
-		"Description": "Description1",
-		"ID": "85d436f9-3500-4a4b-abea-840fd5e044ec",
-		"Images": "",
-		"Name": "Name1",
-		"OpenHours": "OpenHours1"
+		"address": "Address1",
+		"averagePrice": "1000",
+		"description": "Description1",
+		"id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+		"images": "",
+		"name": "Name1",
+		"openHours": "OpenHours1"
 	},
 	{
-		"Address": "Address2",
-		"AveragePrice": "2000",
-		"Description": "Description2",
-		"ID": "344ce739-adb5-41da-8bd2-189db10cad39",
-		"Images": "",
-		"Name": "Name2",
-		"OpenHours": "OpenHours2"
+		"address": "Address2",
+		"averagePrice": "2000",
+		"description": "Description2",
+		"id": "344ce739-adb5-41da-8bd2-189db10cad39",
+		"images": "",
+		"name": "Name2",
+		"openHours": "OpenHours2"
 	}
 ]
 ```
