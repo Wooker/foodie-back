@@ -72,10 +72,10 @@ async fn register(user_info: web::Json<UserInfo>) -> impl Responder {
     }
 
     if let Ok(login) = UserInfo::register(user_info.into_inner()) {
-        let result = serde_json::to_string(&serde_json::json!({
+        let result = &serde_json::json!({
             "login": login,
-        })).unwrap();
-        actix_web::HttpResponse::Ok().body(result)
+        });
+        actix_web::HttpResponse::Ok().json(result)
     } else {
         let error_message = serde_json::json!({
             "error": "User already exists"
@@ -88,8 +88,11 @@ async fn register(user_info: web::Json<UserInfo>) -> impl Responder {
 #[post("/login")]
 async fn login_service(user_info: web::Json<UserInfo>) -> impl Responder {
     let user = user_info.into_inner();
-    match UserInfo::check(user) {
-        Ok(()) =>  actix_web::HttpResponse::Ok().finish(),
+    match UserInfo::check(user.clone()) {
+        Ok(()) =>  {
+            let result = serde_json::json!({ "login": user.get_login() });
+            actix_web::HttpResponse::Ok().json(result)
+        },
         Err(e) => {
             let error_message = serde_json::json!({
                 "error": e.to_string()

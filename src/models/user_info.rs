@@ -10,7 +10,7 @@ use crate::{
     schema::user_info::dsl::*,
 };
 
-#[derive(Debug, Serialize, Deserialize, Insertable, Queryable, Selectable)]
+#[derive(Debug, Clone, Serialize, Deserialize, Insertable, Queryable, Selectable)]
 #[diesel(table_name = user_info)]
 pub struct UserInfo {
     #[serde(rename = "login")]
@@ -20,6 +20,10 @@ pub struct UserInfo {
 }
 
 impl UserInfo {
+    pub fn get_login(&self) -> &String {
+        &self.id
+    }
+
     pub fn password_empty(&self) -> bool {
         self.password.is_none()
     }
