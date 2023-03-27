@@ -47,10 +47,10 @@ diesel::table! {
 }
 
 diesel::table! {
-    restaurant_location (restaurant_info_id) {
+    restaurant_location (restaurant_info_id, longitude, latitude) {
         restaurant_info_id -> Uuid,
-        longitude -> Nullable<Float8>,
-        latitude -> Nullable<Float8>,
+        longitude -> Float4,
+        latitude -> Float4,
     }
 }
 

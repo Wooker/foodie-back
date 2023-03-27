@@ -15,8 +15,10 @@ use crate::errors::CustomError;
 
 use models::{
     city::City,
+    types::Location,
     user_info::UserInfo,
     restaurant_info::RestaurantInfo,
+    restaurant_info::RestaurantLocation,
     restaurant_category::RestaurantCategory,
     //restaurant_category::RestaurantCategory
 };
@@ -50,6 +52,14 @@ async fn categories() -> impl Responder {
     }
 
     actix_web::HttpResponse::Ok().json(json)
+}
+
+//TODO: allow REST input
+#[get("/locations")]
+async fn locations(query: web::Query<Location>) -> impl Responder {
+    let result = RestaurantLocation::by_nearest_to(query.longitude, query.latitude).unwrap();
+
+    actix_web::HttpResponse::Ok().json(result)
 }
 
 #[post("/register")]
@@ -95,6 +105,9 @@ async fn main() -> Result<(), CustomError> {
 
     db::init()?;
 
+    let a: f32 = 20.2;
+    println!("{}", a.powf(2.0));
+    
     HttpServer::new(|| {
         App::new()
             .service(cities)
@@ -104,6 +117,7 @@ async fn main() -> Result<(), CustomError> {
             .service(register)
             .service(login_service)
             .service(categories)
+            .service(locations)
     })
     .bind(("127.0.0.1", 8088))?
     .run()
