@@ -53,8 +53,14 @@ POST /register
 Body:
 ```json
 {
-	"login": "user",
-	"password": "password"
+	"login": "user3",
+	"password": "1234"
+}
+```
+Response:
+```json
+{
+	"login": "user3"
 }
 ```
 
@@ -65,8 +71,14 @@ POST /login
 Body:
 ```json
 {
-	"login": "user",
-	"password": "password"
+	"login": "user1",
+	"password": "123"
+}
+```
+Response:
+```json
+{
+	"login": "user1"
 }
 ```
 ## Categories
