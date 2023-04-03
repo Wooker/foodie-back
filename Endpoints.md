@@ -28,6 +28,8 @@ Data:
 ]
 ```
 
+---
+
 ## Cities
 ```txt
 GET /cities
@@ -45,6 +47,8 @@ Data:
 	}
 ]
 ```
+
+---
 
 ## Register
 ```txt
@@ -64,6 +68,8 @@ Response:
 }
 ```
 
+---
+
 ## Login
 ```txt
 POST /login
@@ -81,6 +87,9 @@ Response:
 	"login": "user1"
 }
 ```
+
+---
+
 ## Categories
 ```txt
 GET /categories
@@ -113,6 +122,8 @@ Data:
   }
 ]
 ```
+
+---
 
 ## Locations
 ```txt
@@ -149,4 +160,49 @@ Data:
         "openHours": "OpenHours2"
     }
 }]
+```
+
+---
+
+## Favorites
+```txt
+POST /add_favorite
+```
+Body:
+```json
+{
+	"login": "user1",
+	"restaurant_id": "006f41e5-ab90-4e86-9e74-c381e8220919"
+}
+```
+Response: 200 OK
+
+---
+
+```txt
+POST /delete_favorite
+```
+Body:
+```json
+{
+	"login": "user1",
+	"restaurant_id": "006f41e5-ab90-4e86-9e74-c381e8220919"
+}
+```
+Response: 200 OK
+
+---
+
+```txt
+POST /get_favorites
+```
+Body:
+```json
+{
+	"login": "user1"
+}
+```
+Response:
+```json
+["85d436f9-3500-4a4b-abea-840fd5e044ec", "006f41e5-ab90-4e86-9e74-c381e8220919"]
 ```
