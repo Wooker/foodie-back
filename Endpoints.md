@@ -6,26 +6,43 @@ GET /restaurants
 ```
 Data:
 ```json
-[
-	{
-		"address": "Address1",
-		"averagePrice": "1000",
-		"description": "Description1",
-		"id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
-		"images": "",
-		"name": "Name1",
-		"openHours": "OpenHours1"
-	},
-	{
-		"address": "Address2",
-		"averagePrice": "2000",
-		"description": "Description2",
-		"id": "344ce739-adb5-41da-8bd2-189db10cad39",
-		"images": "",
-		"name": "Name2",
-		"openHours": "OpenHours2"
-	}
-]
+[{
+    "address": "Akyrtas street, 1/1",
+    "averagePrice": "10000",
+    "categories": ["Ramen", "Japanese"],
+    "description": "Zina restaurant - \"В гостях у Бабушки Зины\"",
+    "id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+    "image_url": "http://1140427-ci11141.tw1.ru:8080/images/zina.jpg",
+    "name": "Zina",
+    "openHours": "08:00-24:00"
+}, {
+    "address": "Mangilik el street, 29",
+    "averagePrice": "20000",
+    "categories": ["FastFood"],
+    "description": "Qazaq gourmet restaurant",
+    "id": "344ce739-adb5-41da-8bd2-189db10cad39",
+    "image_url": "http://1140427-ci11141.tw1.ru:8080/images/qazaq_gourmet.jpg",
+    "name": "Qazaq Gourmet",
+    "openHours": "12:00-23:00"
+}, {
+    "address": "Uly dala street, 45",
+    "averagePrice": "4000",
+    "categories": ["Italian", "FastFood"],
+    "description": "Halal restaurant",
+    "id": "4d237a1c-0fd0-4f4a-b395-04b4468ecb14",
+    "image_url": "http://1140427-ci11141.tw1.ru:8080/images/meat_point.png",
+    "name": "Meat point",
+    "openHours": "00:00-24:00"
+}, {
+    "address": "Sarayshik street, 5",
+    "averagePrice": "2500",
+    "categories": [],
+    "description": "Chinese restaurant",
+    "id": "006f41e5-ab90-4e86-9e74-c381e8220919",
+    "image_url": "http://1140427-ci11141.tw1.ru:8080/images/lanzhou.png",
+    "name": "Lanzhou",
+    "openHours": "11:00-23:00"
+}]
 ```
 
 ---
@@ -96,31 +113,59 @@ GET /categories
 ```
 Data:
 ```json
-[
-  {
-    "category": "FastFood",
-    "restaurants": [
-      {
-        "address": "Address2",
-        "averagePrice": "2000",
-        "description": "Description2",
-        "id": "344ce739-adb5-41da-8bd2-189db10cad39",
-        "images": "",
-        "name": "Name2",
-        "openHours": "OpenHours2"
-      },
-      {
-        "address": "Address3",
-        "averagePrice": "3000",
-        "description": "Description3",
+[{
+    "category": "Ramen",
+    "restaurants": [{
+        "address": "Akyrtas street, 1/1",
+        "averagePrice": "10000",
+        "description": "Zina restaurant - \"В гостях у Бабушки Зины\"",
+        "id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+        "image_url": "http://1140427-ci11141.tw1.ru:8080/images/zina.jpg",
+        "name": "Zina",
+        "openHours": "08:00-24:00"
+    }]
+}, {
+    "category": "Italian",
+    "restaurants": [{
+        "address": "Uly dala street, 45",
+        "averagePrice": "4000",
+        "description": "Halal restaurant",
         "id": "4d237a1c-0fd0-4f4a-b395-04b4468ecb14",
-        "images": "",
-        "name": "Name3",
-        "openHours": "OpenHours3"
-      }
-    ]
-  }
-]
+        "image_url": "http://1140427-ci11141.tw1.ru:8080/images/meat_point.png",
+        "name": "Meat point",
+        "openHours": "00:00-24:00"
+    }]
+}, {
+    "category": "FastFood",
+    "restaurants": [{
+        "address": "Mangilik el street, 29",
+        "averagePrice": "20000",
+        "description": "Qazaq gourmet restaurant",
+        "id": "344ce739-adb5-41da-8bd2-189db10cad39",
+        "image_url": "http://1140427-ci11141.tw1.ru:8080/images/qazaq_gourmet.jpg",
+        "name": "Qazaq Gourmet",
+        "openHours": "12:00-23:00"
+    }, {
+        "address": "Uly dala street, 45",
+        "averagePrice": "4000",
+        "description": "Halal restaurant",
+        "id": "4d237a1c-0fd0-4f4a-b395-04b4468ecb14",
+        "image_url": "http://1140427-ci11141.tw1.ru:8080/images/meat_point.png",
+        "name": "Meat point",
+        "openHours": "00:00-24:00"
+    }]
+}, {
+    "category": "Japanese",
+    "restaurants": [{
+        "address": "Akyrtas street, 1/1",
+        "averagePrice": "10000",
+        "description": "Zina restaurant - \"В гостях у Бабушки Зины\"",
+        "id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+        "image_url": "http://1140427-ci11141.tw1.ru:8080/images/zina.jpg",
+        "name": "Zina",
+        "openHours": "08:00-24:00"
+    }]
+}]
 ```
 
 ---
@@ -137,13 +182,13 @@ Data:
         "longitude": 50.20000076293945
     },
     "restaurant": {
-        "address": "Address3",
-        "averagePrice": "3000",
-        "description": "Description3",
+        "address": "Uly dala street, 45",
+        "averagePrice": "4000",
+        "description": "Halal restaurant",
         "id": "4d237a1c-0fd0-4f4a-b395-04b4468ecb14",
-        "images": "",
-        "name": "Name3",
-        "openHours": "OpenHours3"
+        "image_url": "http://1140427-ci11141.tw1.ru:8080/images/meat_point.png",
+        "name": "Meat point",
+        "openHours": "00:00-24:00"
     }
 }, {
     "location": {
@@ -151,13 +196,27 @@ Data:
         "longitude": 30.200000762939453
     },
     "restaurant": {
-        "address": "Address2",
-        "averagePrice": "2000",
-        "description": "Description2",
+        "address": "Mangilik el street, 29",
+        "averagePrice": "20000",
+        "description": "Qazaq gourmet restaurant",
         "id": "344ce739-adb5-41da-8bd2-189db10cad39",
-        "images": "",
-        "name": "Name2",
-        "openHours": "OpenHours2"
+        "image_url": "http://1140427-ci11141.tw1.ru:8080/images/qazaq_gourmet.jpg",
+        "name": "Qazaq Gourmet",
+        "openHours": "12:00-23:00"
+    }
+}, {
+    "location": {
+        "latitude": 30.299999237060547,
+        "longitude": 20.200000762939453
+    },
+    "restaurant": {
+        "address": "Akyrtas street, 1/1",
+        "averagePrice": "10000",
+        "description": "Zina restaurant - \"В гостях у Бабушки Зины\"",
+        "id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+        "image_url": "http://1140427-ci11141.tw1.ru:8080/images/zina.jpg",
+        "name": "Zina",
+        "openHours": "08:00-24:00"
     }
 }]
 ```
