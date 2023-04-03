@@ -42,7 +42,7 @@ diesel::table! {
         address -> Varchar,
         openHours -> Varchar,
         averagePrice -> Nullable<Numeric>,
-        images -> Nullable<Text>,
+        image_url -> Nullable<Text>,
     }
 }
 
@@ -92,7 +92,7 @@ diesel::table! {
 }
 
 diesel::table! {
-    user_favorites (user_info_id) {
+    user_favorites (user_info_id, restaurant_info_id) {
         user_info_id -> Varchar,
         restaurant_info_id -> Uuid,
     }

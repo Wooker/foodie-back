@@ -19,6 +19,18 @@ pub struct UserInfo {
     password: Option<String>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserLogin {
+    login: String
+}
+
+impl UserLogin {
+    pub fn get_login(&self) -> &String {
+        &self.login
+    }
+}
+
+
 impl UserInfo {
     pub fn get_login(&self) -> &String {
         &self.id

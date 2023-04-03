@@ -2,8 +2,8 @@
 
 use serde::{Serialize, Deserialize};
 use diesel::prelude::*;
-use serde_json::Value;
 use std::collections::HashMap;
+use uuid::Uuid;
 
 use crate::{
     RestaurantInfo,
@@ -14,11 +14,12 @@ use crate::{
     models::types::CategoryType,
 };
 
-#[derive(Debug, Serialize, Associations, Deserialize, Selectable, Queryable)]
+#[derive(Debug, Serialize, Associations, Identifiable, Deserialize, Selectable, Queryable)]
 #[diesel(belongs_to(RestaurantInfo))]
+#[diesel(primary_key(restaurant_info_id))]
 #[diesel(table_name = restaurant_category)]
 pub struct RestaurantCategory {
-    restaurant_info_id: uuid::Uuid,
+    restaurant_info_id: Uuid,
     category_type: CategoryType,
 }
 
@@ -46,13 +47,13 @@ impl RestaurantCategory {
         Ok(categories)
     }
 
-    pub fn of_restaurant(other_id: uuid::Uuid) -> Result<Value, CustomError> {
+    pub fn of_restaurant(other_id: &Uuid) -> Result<Vec<CategoryType>, CustomError> {
         let mut conn = connection()?;
-        let result = restaurant_category::table
+        let categories: Vec<CategoryType> = restaurant_category::table
             .filter(restaurant_category::restaurant_info_id.eq(other_id))
             .select(restaurant_category::category_type)
             .load::<CategoryType>(&mut conn).unwrap();
 
-        Ok(serde_json::to_value(result).unwrap())
+        Ok(categories)
     }
 }

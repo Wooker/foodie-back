@@ -3,8 +3,9 @@
 use serde::{Serialize, Deserialize};
 use diesel::prelude::*;
 use serde_json::Value;
-use bigdecimal::{BigDecimal, num_traits::Pow};
+use bigdecimal::BigDecimal;
 use std::cmp::Ordering;
+use uuid::Uuid;
 
 use crate::{
     db::connection,
@@ -12,28 +13,43 @@ use crate::{
     schema::restaurant_info,
     schema::restaurant_info::dsl::*,
     schema::restaurant_location,
-    schema::restaurant_location::dsl::*,
+    schema::restaurant_category::dsl::*,
+
+    models::{
+        restaurant_category::RestaurantCategory,
+        types::CategoryType,
+    },
 };
 
 
 #[derive(Debug, PartialEq, Identifiable, Selectable, Serialize, Deserialize, Queryable)]
 #[diesel(table_name = restaurant_info)]
 pub struct RestaurantInfo {
-    id: uuid::Uuid,
-    name: String,
-    description: String,
-    address: String,
-    openHours: String,
-    averagePrice: Option<BigDecimal>,
-    images: Option<String>,
+    pub id: Uuid,
+    pub name: String,
+    pub description: String,
+    pub address: String,
+    pub openHours: String,
+    pub averagePrice: Option<BigDecimal>,
+    pub image_url: Option<String>,
 }
 
 impl RestaurantInfo {
-    pub fn get_all() -> Result<Value, CustomError> {
-        let mut conn = connection()?;
-        let rests = restaurant_info.get_results::<RestaurantInfo>(&mut conn).unwrap();
+    pub fn get_id(&self) -> &Uuid {
+        &self.id
+    }
 
-        Ok(serde_json::to_value(rests).unwrap())
+    pub fn get_all() -> Result<Vec<RestaurantInfo>, CustomError> {
+        let mut conn = connection()?;
+        let restaurants = restaurant_info.get_results::<RestaurantInfo>(&mut conn).unwrap();
+
+        for restaurant in restaurants.iter() {
+            let categories: Vec<CategoryType> = RestaurantCategory::belonging_to(&restaurant)
+                .select(category_type)
+                .load(&mut conn)?;
+        }
+
+        Ok(restaurants)
     }
 }
 
@@ -42,7 +58,7 @@ impl RestaurantInfo {
 #[diesel(belongs_to(RestaurantInfo))]
 #[diesel(table_name = restaurant_location)]
 pub struct RestaurantLocation {
-    restaurant_info_id: uuid::Uuid,
+    restaurant_info_id: Uuid,
     latitude: f32,
     longitude: f32
 }

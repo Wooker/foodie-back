@@ -5,9 +5,9 @@ CREATE TABLE "restaurant_info" (
   "name" varchar(20) NOT NULL,
   "description" text NOT NULL,
   "address" varchar(30) NOT NULL,
-  "openHours" varchar(10) NOT NULL,
+  "openHours" varchar(11) NOT NULL,
   "averagePrice" decimal,
-  "images" text
+  "image_url" text
 );
 
 CREATE TABLE "restaurant_location" (
@@ -20,13 +20,15 @@ CREATE TABLE "restaurant_location" (
 ALTER TABLE "restaurant_location" ADD FOREIGN KEY ("restaurant_info_id") REFERENCES "restaurant_info" ("id");
 
 INSERT INTO restaurant_info VALUES
-('85d436f9-3500-4a4b-abea-840fd5e044ec', 'Name1', 'Description1', 'Address1', 'OpenHours1', 1000, ''),
-('344ce739-adb5-41da-8bd2-189db10cad39', 'Name2', 'Description2', 'Address2', 'OpenHours2', 2000, ''),
-('4d237a1c-0fd0-4f4a-b395-04b4468ecb14', 'Name3', 'Description3', 'Address3', 'OpenHours3', 3000, '')
+('85d436f9-3500-4a4b-abea-840fd5e044ec', 'Zina', 'Zina restaurant - "В гостях у Бабушки Зины"', 'Akyrtas street, 1/1', '08:00-24:00', 10000, 'http://1140427-ci11141.tw1.ru:8080/images/zina.jpg'),
+('344ce739-adb5-41da-8bd2-189db10cad39', 'Qazaq Gourmet', 'Qazaq gourmet restaurant', 'Mangilik el street, 29', '12:00-23:00', 20000, 'http://1140427-ci11141.tw1.ru:8080/images/qazaq_gourmet.jpg'),
+('4d237a1c-0fd0-4f4a-b395-04b4468ecb14', 'Meat point', 'Halal restaurant', 'Uly dala street, 45', '00:00-24:00', 4000, 'http://1140427-ci11141.tw1.ru:8080/images/meat_point.png'),
+('006f41e5-ab90-4e86-9e74-c381e8220919', 'Lanzhou', 'Chinese restaurant', 'Sarayshik street, 5', '11:00-23:00', 2500, 'http://1140427-ci11141.tw1.ru:8080/images/lanzhou.png')
 ;
 
 INSERT INTO restaurant_location VALUES
 ('85d436f9-3500-4a4b-abea-840fd5e044ec', 20.2, 30.3),
 ('344ce739-adb5-41da-8bd2-189db10cad39', 30.2, 40.3),
-('4d237a1c-0fd0-4f4a-b395-04b4468ecb14', 50.2, 60.3)
+('4d237a1c-0fd0-4f4a-b395-04b4468ecb14', 50.2, 60.3),
+('006f41e5-ab90-4e86-9e74-c381e8220919', 50.2, 60.3)
 ;

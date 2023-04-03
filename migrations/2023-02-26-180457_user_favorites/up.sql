@@ -1,7 +1,7 @@
 CREATE TABLE "user_favorites" (
   "user_info_id" VARCHAR(30),
   "restaurant_info_id" uuid NOT NULL,
-  PRIMARY KEY ("user_info_id")
+  PRIMARY KEY ("user_info_id", "restaurant_info_id")
 );
 
 ALTER TABLE "user_favorites" ADD FOREIGN KEY ("restaurant_info_id") REFERENCES "restaurant_info" ("id");
