@@ -164,7 +164,7 @@ async fn add_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
     }
 }
 
-#[delete("/favorite")]
+#[post("/delete_favorite")]
 async fn delete_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
     if let Ok(login) = UserFavorite::delete(favorite.into_inner()) {
         actix_web::HttpResponse::Ok().finish()
