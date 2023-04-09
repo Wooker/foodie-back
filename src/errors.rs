@@ -7,5 +7,5 @@ pub enum CustomError {
     #[error("IO Error: ")]
     IO(#[from] std::io::Error),
     #[error("Wrong password")]
-    PasswordMismatch
+    PasswordMismatch,
 }

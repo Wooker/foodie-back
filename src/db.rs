@@ -1,8 +1,8 @@
-use r2d2;
-use std::env;
-use lazy_static::lazy_static;
 use diesel::{pg::PgConnection, r2d2::ConnectionManager};
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
+use lazy_static::lazy_static;
+use r2d2;
+use std::env;
 
 use crate::errors::CustomError;
 
@@ -21,7 +21,8 @@ lazy_static! {
 pub fn init() -> Result<(), CustomError> {
     lazy_static::initialize(&POOL);
     let mut conn = connection()?;
-    conn.run_pending_migrations(MIGRATIONS).expect("Could not run migrations");
+    conn.run_pending_migrations(MIGRATIONS)
+        .expect("Could not run migrations");
 
     Ok(())
 }

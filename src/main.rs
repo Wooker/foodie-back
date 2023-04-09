@@ -2,11 +2,11 @@
 #![allow(dead_code)]
 #![allow(non_snake_case)]
 
-use dotenv::dotenv;
-use actix_web::{get, post, delete, web, App, HttpServer, Responder, middleware::Logger};
 use actix_files::Files;
+use actix_web::{delete, get, middleware::Logger, post, web, App, HttpServer, Responder};
+use dotenv::dotenv;
 use env_logger::Env;
-use log::{info, debug, error};
+use log::{debug, error, info};
 
 mod db;
 mod errors;
@@ -17,12 +17,12 @@ use crate::errors::CustomError;
 
 use models::{
     city::City,
-    types::{CategoryType, Location},
-    user_info::{UserInfo, UserLogin},
     favorites::UserFavorite,
+    restaurant_category::RestaurantCategory,
     restaurant_info::RestaurantInfo,
     restaurant_info::RestaurantLocation,
-    restaurant_category::RestaurantCategory,
+    types::{CategoryType, Location},
+    user_info::{UserInfo, UserLogin},
 };
 
 #[get("/shirin")]
@@ -46,7 +46,8 @@ async fn restaurants() -> impl Responder {
         result.as_array_mut().unwrap().push(serde_json::json!({}));
 
         // Get categories of the restaurant
-        let cats: Vec<CategoryType> = RestaurantCategory::of_restaurant(restaurant.get_id()).unwrap();
+        let cats: Vec<CategoryType> =
+            RestaurantCategory::of_restaurant(restaurant.get_id()).unwrap();
 
         // Add all the fields
         result[i]["id"] = serde_json::to_value(restaurant.id).unwrap();
@@ -111,7 +112,7 @@ async fn register(user_info: web::Json<UserInfo>) -> impl Responder {
         let error_message = serde_json::json!({
             "error": "Password is empty"
         });
-        return actix_web::HttpResponse::InternalServerError().json(error_message)
+        return actix_web::HttpResponse::InternalServerError().json(error_message);
     }
 
     if let Ok(login) = UserInfo::register(user_info.into_inner()) {
@@ -123,24 +124,23 @@ async fn register(user_info: web::Json<UserInfo>) -> impl Responder {
         let error_message = serde_json::json!({
             "error": "User already exists"
         });
-        return actix_web::HttpResponse::InternalServerError().json(error_message)
+        return actix_web::HttpResponse::InternalServerError().json(error_message);
     }
 }
-
 
 #[post("/login")]
 async fn login_service(user_info: web::Json<UserInfo>) -> impl Responder {
     let user = user_info.into_inner();
     match UserInfo::check(user.clone()) {
-        Ok(()) =>  {
+        Ok(()) => {
             let result = serde_json::json!({ "login": user.get_login() });
             actix_web::HttpResponse::Ok().json(result)
-        },
+        }
         Err(e) => {
             let error_message = serde_json::json!({
                 "error": e.to_string()
             });
-            return actix_web::HttpResponse::InternalServerError().json(error_message)
+            return actix_web::HttpResponse::InternalServerError().json(error_message);
         }
     }
 }
@@ -151,7 +151,7 @@ async fn get_favorites(login: web::Json<UserLogin>) -> impl Responder {
         let result = serde_json::to_value(data).unwrap();
         actix_web::HttpResponse::Ok().json(result)
     } else {
-        return actix_web::HttpResponse::InternalServerError().finish()
+        return actix_web::HttpResponse::InternalServerError().finish();
     }
 }
 
@@ -160,7 +160,7 @@ async fn add_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
     if let Ok(login) = UserFavorite::add(favorite.into_inner()) {
         actix_web::HttpResponse::Ok().finish()
     } else {
-        return actix_web::HttpResponse::InternalServerError().finish()
+        return actix_web::HttpResponse::InternalServerError().finish();
     }
 }
 
@@ -169,7 +169,7 @@ async fn delete_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
     if let Ok(login) = UserFavorite::delete(favorite.into_inner()) {
         actix_web::HttpResponse::Ok().finish()
     } else {
-        return actix_web::HttpResponse::InternalServerError().finish()
+        return actix_web::HttpResponse::InternalServerError().finish();
     }
 }
 
@@ -179,7 +179,6 @@ async fn main() -> Result<(), CustomError> {
 
     db::init()?;
     env_logger::init_from_env(Env::default().default_filter_or("info"));
-
 
     HttpServer::new(|| {
         App::new()

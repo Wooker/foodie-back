@@ -1,14 +1,16 @@
 use self::CategoryType::*;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy, Serialize, Deserialize, diesel_derive_enum::DbEnum)]
-#[DieselTypePath = "crate::schema::sql_types::Category"]
+#[derive(
+    Debug, PartialEq, Eq, Hash, Clone, Copy, Serialize, Deserialize, diesel_derive_enum::DbEnum,
+)]
+#[ExistingTypePath = "crate::schema::sql_types::Category"]
 #[DbValueStyle = "PascalCase"]
 pub enum CategoryType {
-  FastFood,
-  Ramen,
-  Italian,
-  Japanese
+    FastFood,
+    Ramen,
+    Italian,
+    Japanese,
 }
 
 impl CategoryType {
@@ -18,15 +20,15 @@ impl CategoryType {
 }
 
 #[derive(Debug, Serialize, Deserialize, diesel_derive_enum::DbEnum)]
-#[DieselTypePath = "crate::schema::sql_types::Tablestatus"]
+#[ExistingTypePath = "crate::schema::sql_types::Tablestatus"]
 #[DbValueStyle = "PascalCase"]
 pub enum TableStatus {
     Free,
-    Occupied
+    Occupied,
 }
 
 #[derive(Deserialize)]
 pub struct Location {
     pub longitude: f32,
-    pub latitude: f32
+    pub latitude: f32,
 }

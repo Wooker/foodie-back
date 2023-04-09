@@ -1,15 +1,11 @@
-
 #![allow(non_snake_case)]
 
-use serde::{Serialize, Deserialize};
 use diesel::prelude::*;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::{
-    db::connection,
-    errors::CustomError,
-    schema::user_favorites,
-    schema::user_favorites::dsl::*,
+    db::connection, errors::CustomError, schema::user_favorites, schema::user_favorites::dsl::*,
 };
 
 #[derive(Debug, Clone, Serialize, Deserialize, Insertable, Queryable, Selectable)]
@@ -37,7 +33,7 @@ impl UserFavorite {
             .select(restaurant_info_id)
             .load::<Uuid>(&mut conn)
             .unwrap();
-        
+
         Ok(result)
     }
 
@@ -56,9 +52,10 @@ impl UserFavorite {
             user_favorites.filter(
                 user_info_id
                     .eq(favorite.get_user_id())
-                    .and(restaurant_info_id.eq(favorite.get_restaurant_id()))
-            )
-        ).execute(&mut conn)?;
+                    .and(restaurant_info_id.eq(favorite.get_restaurant_id())),
+            ),
+        )
+        .execute(&mut conn)?;
 
         Ok(())
     }

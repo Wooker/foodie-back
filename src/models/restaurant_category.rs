@@ -1,17 +1,13 @@
 #![allow(non_snake_case)]
 
-use serde::{Serialize, Deserialize};
 use diesel::prelude::*;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use uuid::Uuid;
 
 use crate::{
-    RestaurantInfo,
-    db::connection,
-    errors::CustomError,
-    schema::restaurant_category,
-    schema::restaurant_info,
-    models::types::CategoryType,
+    db::connection, errors::CustomError, models::types::CategoryType, schema::restaurant_category,
+    schema::restaurant_info, RestaurantInfo,
 };
 
 #[derive(Debug, Serialize, Associations, Identifiable, Deserialize, Selectable, Queryable)]
@@ -37,10 +33,7 @@ impl RestaurantCategory {
 
             categories.insert(
                 category,
-                ids
-                    .into_iter()
-                    .map(|result_join| { result_join.1 })
-                    .collect()
+                ids.into_iter().map(|result_join| result_join.1).collect(),
             );
         }
 
@@ -52,7 +45,8 @@ impl RestaurantCategory {
         let categories: Vec<CategoryType> = restaurant_category::table
             .filter(restaurant_category::restaurant_info_id.eq(other_id))
             .select(restaurant_category::category_type)
-            .load::<CategoryType>(&mut conn).unwrap();
+            .load::<CategoryType>(&mut conn)
+            .unwrap();
 
         Ok(categories)
     }

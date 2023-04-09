@@ -1,12 +1,8 @@
-use serde::{Serialize, Deserialize};
 use diesel::prelude::*;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::{
-    db::connection,
-    errors::CustomError,
-    schema::city::dsl::*,
-};
+use crate::{db::connection, errors::CustomError, schema::city::dsl::*};
 
 #[derive(Debug, Serialize, Deserialize, Queryable)]
 #[diesel(table_name = city)]
