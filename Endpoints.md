@@ -276,7 +276,7 @@ Body:
 {
 	"login": "user1",
 	"restaurant_id": "006f41e5-ab90-4e86-9e74-c381e8220919",
-  "table_id": 1
+	"table_id": 1
 }
 ```
 Response: 200 OK
@@ -291,7 +291,7 @@ Body:
 {
 	"login": "user1",
 	"restaurant_id": "006f41e5-ab90-4e86-9e74-c381e8220919",
-  "table_id": 1
+	"table_id": 1
 }
 ```
 Response: 200 OK
