@@ -5,5 +5,6 @@ CREATE TABLE "user_info" (
 
 INSERT INTO user_info VALUES
 ('user1', '123'),
-('user2', 'password')
+('user2', 'password'),
+('bunnytest1', 'bunnytest1')
 ;

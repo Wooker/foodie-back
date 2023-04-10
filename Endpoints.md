@@ -265,3 +265,89 @@ Response:
 ```json
 ["85d436f9-3500-4a4b-abea-840fd5e044ec", "006f41e5-ab90-4e86-9e74-c381e8220919"]
 ```
+---
+
+## Reservation
+```txt
+POST /reserve
+```
+Body:
+```json
+{
+	"login": "user1",
+	"restaurant_id": "006f41e5-ab90-4e86-9e74-c381e8220919",
+  "table_id": 1
+}
+```
+Response: 200 OK
+
+---
+
+```txt
+POST /delete_reservation
+```
+Body:
+```json
+{
+	"login": "user1",
+	"restaurant_id": "006f41e5-ab90-4e86-9e74-c381e8220919",
+  "table_id": 1
+}
+```
+Response: 200 OK
+
+---
+
+```txt
+POST /get_reservations
+```
+Body:
+```json
+{
+	"login": "user1"
+}
+```
+Response:
+```json
+[
+	{
+		"restaurant_id": "006f41e5-ab90-4e86-9e74-c381e8220919",
+		"table_id": 1
+	}
+]
+```
+---
+
+## Tables
+```txt
+GET /{restaurant_id}/tables
+```
+Response:
+```json
+[
+	{
+		"restaurant_info_id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+		"seats": 2,
+		"status": "Occupied",
+		"table_id": 1
+	},
+	{
+		"restaurant_info_id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+		"seats": 2,
+		"status": "Occupied",
+		"table_id": 2
+	},
+	{
+		"restaurant_info_id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+		"seats": 4,
+		"status": "Free",
+		"table_id": 3
+	},
+	{
+		"restaurant_info_id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+		"seats": 2,
+		"status": "Occupied",
+		"table_id": 4
+	}
+]
+```

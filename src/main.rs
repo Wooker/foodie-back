@@ -7,17 +7,19 @@ use actix_web::{delete, get, middleware::Logger, post, web, App, HttpServer, Res
 use dotenv::dotenv;
 use env_logger::Env;
 use log::{debug, error, info};
+use uuid::Uuid;
 
 mod db;
 mod errors;
 mod models;
 mod schema;
 
-use crate::errors::CustomError;
+use crate::{errors::CustomError, models::restaurant_table::RestaurantTable};
 
 use models::{
     city::City,
     favorites::UserFavorite,
+    reservations::Reservation,
     restaurant_category::RestaurantCategory,
     restaurant_info::RestaurantInfo,
     restaurant_info::RestaurantLocation,
@@ -62,28 +64,6 @@ async fn restaurants() -> impl Responder {
 
     actix_web::HttpResponse::Ok().json(result)
 }
-
-/*
-#[get("/images/{restaurant_id}")]
-fn get_image(path: web::Path<(Uuid,)>) -> actix_web::HttpResponse {
-    let file_name = path.into_inner().0.to_string() + ".png";
-    actix_web::HttpResponse::Ok().body(file_name)
-
-    /*
-    match std::fs::read(path.as_str().unwrap().to_string().append(".png")) {
-        Ok(image_content) => {
-            Ok(HttpResponse::Ok()
-                .content_type("image/png")
-                .body(image_content))
-        },
-        Err(e) => {
-            println!("get_image({}): error, {:?}", req.match_info().query("id").parse::<String>().unwrap(), e);
-            Err(actix_web::Error::from(e))
-        }
-    }
-    */
-// }
-*/
 
 #[get("/categories")]
 async fn categories() -> impl Responder {
@@ -173,6 +153,53 @@ async fn delete_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
     }
 }
 
+#[get("{restaurant_id}/tables")]
+async fn get_tables(path: web::Path<(Uuid,)>) -> impl Responder {
+    let restaurant_id = path.into_inner().0;
+    if let Ok(restaurant) = RestaurantInfo::get(restaurant_id) {
+        let tables = RestaurantTable::of_restaurant(&restaurant).unwrap();
+        let result = serde_json::to_value(tables).unwrap();
+        actix_web::HttpResponse::Ok().json(result)
+    } else {
+        actix_web::HttpResponse::InternalServerError().finish()
+    }
+}
+
+#[post("/get_reservations")]
+async fn get_reservations(login: web::Json<UserLogin>) -> impl Responder {
+    if let Ok(data) = Reservation::get_all(login.into_inner().get_login()) {
+        let mut result = serde_json::json!([]); //serde_json::to_value(data).unwrap();
+
+        for (i, reservation) in data.iter().enumerate() {
+            result.as_array_mut().unwrap().push(serde_json::json!({}));
+
+            result[i]["restaurant_id"] = serde_json::to_value(reservation.0).unwrap();
+            result[i]["table_id"] = serde_json::to_value(reservation.1).unwrap();
+        }
+        actix_web::HttpResponse::Ok().json(result)
+    } else {
+        return actix_web::HttpResponse::InternalServerError().finish();
+    }
+}
+
+#[post("/reserve")]
+async fn add_reservation(reservation: web::Json<Reservation>) -> impl Responder {
+    if let Ok(login) = Reservation::add(reservation.into_inner()) {
+        actix_web::HttpResponse::Ok().finish()
+    } else {
+        return actix_web::HttpResponse::InternalServerError().finish();
+    }
+}
+
+#[post("/delete_reservation")]
+async fn delete_reservation(reservation: web::Json<Reservation>) -> impl Responder {
+    if let Ok(login) = Reservation::delete(reservation.into_inner()) {
+        actix_web::HttpResponse::Ok().finish()
+    } else {
+        return actix_web::HttpResponse::InternalServerError().finish();
+    }
+}
+
 #[actix_web::main] // or #[tokio::main]
 async fn main() -> Result<(), CustomError> {
     dotenv().ok();
@@ -194,6 +221,10 @@ async fn main() -> Result<(), CustomError> {
             .service(get_favorites)
             .service(add_favorite)
             .service(delete_favorite)
+            .service(get_tables)
+            .service(get_reservations)
+            .service(add_reservation)
+            .service(delete_reservation)
     })
     .bind(("127.0.0.1", 8088))?
     .run()

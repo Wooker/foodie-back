@@ -48,6 +48,20 @@ impl RestaurantInfo {
 
         Ok(restaurants)
     }
+
+    pub fn get(search_id: Uuid) -> Result<RestaurantInfo, CustomError> {
+        let mut conn = connection()?;
+        let restaurants = restaurant_info
+            .get_results::<RestaurantInfo>(&mut conn)
+            .unwrap();
+
+        let restaurant = restaurants
+            .into_iter()
+            .find(|i| i.get_id().eq(&search_id))
+            .unwrap();
+
+        Ok(restaurant)
+    }
 }
 
 #[derive(Debug, Serialize, Associations, Deserialize, Selectable, Queryable)]

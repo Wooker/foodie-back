@@ -18,6 +18,14 @@ diesel::table! {
 }
 
 diesel::table! {
+    reservations (restaurant_info_id, table_id, user_id) {
+        restaurant_info_id -> Uuid,
+        table_id -> Int2,
+        user_id -> Varchar,
+    }
+}
+
+diesel::table! {
     use diesel::sql_types::*;
     use super::sql_types::Category;
 
@@ -75,11 +83,11 @@ diesel::table! {
     use diesel::sql_types::*;
     use super::sql_types::Tablestatus;
 
-    restaurant_tables (RestaurantID, TableNumber) {
-        RestaurantID -> Uuid,
-        TableNumber -> Int2,
-        Seats -> Nullable<Int2>,
-        Status -> Nullable<Tablestatus>,
+    restaurant_tables (restaurant_info_id, table_id) {
+        restaurant_info_id -> Uuid,
+        table_id -> Int2,
+        seats -> Int2,
+        status -> Tablestatus,
     }
 }
 
@@ -105,6 +113,7 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(reservations -> user_info (user_id));
 diesel::joinable!(restaurant_category -> restaurant_info (restaurant_info_id));
 diesel::joinable!(restaurant_city -> city (city_id));
 diesel::joinable!(restaurant_city -> restaurant_info (restaurant_info_id));
@@ -112,12 +121,14 @@ diesel::joinable!(restaurant_location -> restaurant_info (restaurant_info_id));
 diesel::joinable!(restaurant_menu -> restaurant_info (restaurant_info_id));
 diesel::joinable!(restaurant_rating -> restaurant_info (restaurant_info_id));
 diesel::joinable!(restaurant_rating -> user_info (user_info_id));
+diesel::joinable!(restaurant_tables -> restaurant_info (restaurant_info_id));
 diesel::joinable!(user_comment -> restaurant_info (restaurant_info_id));
 diesel::joinable!(user_comment -> user_info (user_info_id));
 diesel::joinable!(user_favorites -> restaurant_info (restaurant_info_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     city,
+    reservations,
     restaurant_category,
     restaurant_city,
     restaurant_info,
