@@ -239,7 +239,7 @@ Response: 200 OK
 ---
 
 ```txt
-POST /delete_favorite
+DELETE /delete_favorite
 ```
 Body:
 ```json
@@ -284,7 +284,7 @@ Response: 200 OK
 ---
 
 ```txt
-POST /delete_reservation
+DELETE /delete_reservation
 ```
 Body:
 ```json

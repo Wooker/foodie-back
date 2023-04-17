@@ -144,7 +144,7 @@ async fn add_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
     }
 }
 
-#[post("/delete_favorite")]
+#[delete("/delete_favorite")]
 async fn delete_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
     if let Ok(login) = UserFavorite::delete(favorite.into_inner()) {
         actix_web::HttpResponse::Ok().finish()
@@ -191,7 +191,7 @@ async fn add_reservation(reservation: web::Json<Reservation>) -> impl Responder 
     }
 }
 
-#[post("/delete_reservation")]
+#[delete("/delete_reservation")]
 async fn delete_reservation(reservation: web::Json<Reservation>) -> impl Responder {
     if let Ok(login) = Reservation::delete(reservation.into_inner()) {
         actix_web::HttpResponse::Ok().finish()
