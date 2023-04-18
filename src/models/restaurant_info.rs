@@ -1,6 +1,5 @@
 #![allow(non_snake_case)]
 
-use bigdecimal::BigDecimal;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -8,12 +7,7 @@ use std::cmp::Ordering;
 use uuid::Uuid;
 
 use crate::{
-    db::connection,
-    errors::CustomError,
-    models::{restaurant_category::RestaurantCategory, types::CategoryType},
-    schema::restaurant_category::dsl::*,
-    schema::restaurant_info,
-    schema::restaurant_info::dsl::*,
+    db::connection, errors::CustomError, schema::restaurant_info, schema::restaurant_info::dsl::*,
     schema::restaurant_location,
 };
 
@@ -24,9 +18,11 @@ pub struct RestaurantInfo {
     pub name: String,
     pub description: String,
     pub address: String,
-    pub openHours: String,
-    pub averagePrice: Option<BigDecimal>,
-    pub image_url: Option<String>,
+    pub opening_hours: String,
+    pub price_range: i16,
+    pub rating: f32,
+    pub image_url: String,
+    pub contact: String,
 }
 
 impl RestaurantInfo {
@@ -39,12 +35,6 @@ impl RestaurantInfo {
         let restaurants = restaurant_info
             .get_results::<RestaurantInfo>(&mut conn)
             .unwrap();
-
-        for restaurant in restaurants.iter() {
-            let categories: Vec<CategoryType> = RestaurantCategory::belonging_to(&restaurant)
-                .select(category_type)
-                .load(&mut conn)?;
-        }
 
         Ok(restaurants)
     }
@@ -66,16 +56,28 @@ impl RestaurantInfo {
 
 #[derive(Debug, Serialize, Associations, Deserialize, Selectable, Queryable)]
 #[diesel(belongs_to(RestaurantInfo))]
+#[diesel(primary_key(restaurant_info_id, latitude, longitude))]
 #[diesel(table_name = restaurant_location)]
 pub struct RestaurantLocation {
+    #[serde(skip)]
     restaurant_info_id: Uuid,
     latitude: f32,
     longitude: f32,
 }
 
 impl RestaurantLocation {
-    pub fn get_all() -> Result<Value, CustomError> {
-        todo!();
+    pub fn of_restaurant(other_id: &Uuid) -> Result<Self, CustomError> {
+        let mut conn = connection()?;
+        let location: RestaurantLocation = restaurant_location::table
+            .filter(restaurant_location::restaurant_info_id.eq(other_id))
+            .select((
+                restaurant_location::restaurant_info_id,
+                restaurant_location::longitude,
+                restaurant_location::latitude,
+            ))
+            .first(&mut conn)?;
+
+        Ok(location)
     }
 
     pub fn by_nearest_to(some_longitude: f32, some_latitude: f32) -> Result<Value, CustomError> {

@@ -1,7 +1,4 @@
-use diesel::{
-    prelude::*,
-    sql_types::{Integer, SmallInt},
-};
+use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 

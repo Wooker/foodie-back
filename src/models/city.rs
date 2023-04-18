@@ -7,8 +7,8 @@ use crate::{db::connection, errors::CustomError, schema::city::dsl::*};
 #[derive(Debug, Serialize, Deserialize, Queryable)]
 #[diesel(table_name = city)]
 pub struct City {
-    ID: uuid::Uuid,
-    Name: String,
+    id: uuid::Uuid,
+    name: String,
 }
 
 impl City {

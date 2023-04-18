@@ -48,9 +48,11 @@ diesel::table! {
         name -> Varchar,
         description -> Text,
         address -> Varchar,
-        openHours -> Varchar,
-        averagePrice -> Nullable<Numeric>,
-        image_url -> Nullable<Text>,
+        opening_hours -> Varchar,
+        price_range -> Int2,
+        rating -> Float4,
+        image_url -> Text,
+        contact -> Text,
     }
 }
 
@@ -63,11 +65,17 @@ diesel::table! {
 }
 
 diesel::table! {
-    restaurant_menu (restaurant_info_id) {
+    use diesel::sql_types::*;
+    use super::sql_types::Category;
+
+    restaurant_menu (restaurant_info_id, id) {
+        id -> Uuid,
         restaurant_info_id -> Uuid,
-        food_name -> Nullable<Varchar>,
-        price -> Nullable<Numeric>,
-        description -> Nullable<Text>,
+        name -> Varchar,
+        menu_category -> Category,
+        price -> Int4,
+        ingredients -> Text,
+        image_url -> Text,
     }
 }
 
@@ -110,6 +118,9 @@ diesel::table! {
     user_info (id) {
         id -> Varchar,
         password -> Nullable<Varchar>,
+        full_name -> Varchar,
+        phone_number -> Varchar,
+        image_url -> Text,
     }
 }
 

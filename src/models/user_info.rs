@@ -12,6 +12,9 @@ pub struct UserInfo {
     id: String,
     #[serde(rename = "password")]
     password: Option<String>,
+    full_name: String,
+    phone_number: String,
+    image_url: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

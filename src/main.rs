@@ -1,9 +1,6 @@
-#![allow(unused_variables)]
-#![allow(dead_code)]
-#![allow(non_snake_case)]
-
 use actix_files::Files;
 use actix_web::{delete, get, middleware::Logger, post, web, App, HttpServer, Responder};
+use diesel::prelude::*;
 use dotenv::dotenv;
 use env_logger::Env;
 use log::{debug, error, info};
@@ -14,7 +11,11 @@ mod errors;
 mod models;
 mod schema;
 
-use crate::{errors::CustomError, models::restaurant_table::RestaurantTable};
+use crate::{
+    errors::CustomError,
+    models::{menu_item::MenuItem, restaurant_table::RestaurantTable},
+    schema::restaurant_category,
+};
 
 use models::{
     city::City,
@@ -48,18 +49,31 @@ async fn restaurants() -> impl Responder {
         result.as_array_mut().unwrap().push(serde_json::json!({}));
 
         // Get categories of the restaurant
-        let cats: Vec<CategoryType> =
-            RestaurantCategory::of_restaurant(restaurant.get_id()).unwrap();
+        let mut conn = db::connection().unwrap();
+        let cats: Vec<CategoryType> = RestaurantCategory::belonging_to(&restaurant)
+            .select(restaurant_category::category_type)
+            .load(&mut conn)
+            .unwrap();
+
+        let menu: Vec<MenuItem> = MenuItem::belonging_to(&restaurant)
+            .select(MenuItem::as_select())
+            .load(&mut conn)
+            .unwrap();
+
+        let location = RestaurantLocation::of_restaurant(restaurant.get_id()).unwrap();
 
         // Add all the fields
         result[i]["id"] = serde_json::to_value(restaurant.id).unwrap();
         result[i]["name"] = serde_json::to_value(restaurant.name.clone()).unwrap();
         result[i]["description"] = serde_json::to_value(restaurant.description.clone()).unwrap();
         result[i]["address"] = serde_json::to_value(restaurant.address.clone()).unwrap();
-        result[i]["openHours"] = serde_json::to_value(restaurant.openHours.clone()).unwrap();
-        result[i]["averagePrice"] = serde_json::to_value(restaurant.averagePrice.clone()).unwrap();
+        result[i]["opening_hours"] =
+            serde_json::to_value(restaurant.opening_hours.clone()).unwrap();
+        result[i]["price_range"] = serde_json::to_value(restaurant.price_range.clone()).unwrap();
         result[i]["image_url"] = serde_json::to_value(restaurant.image_url.clone()).unwrap();
         result[i]["categories"] = serde_json::to_value(cats).unwrap();
+        result[i]["coordinate"] = serde_json::to_value(location).unwrap();
+        result[i]["menu_items"] = serde_json::to_value(menu).unwrap();
     }
 
     actix_web::HttpResponse::Ok().json(result)
@@ -137,7 +151,7 @@ async fn get_favorites(login: web::Json<UserLogin>) -> impl Responder {
 
 #[post("/favorite")]
 async fn add_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
-    if let Ok(login) = UserFavorite::add(favorite.into_inner()) {
+    if let Ok(_login) = UserFavorite::add(favorite.into_inner()) {
         actix_web::HttpResponse::Ok().finish()
     } else {
         return actix_web::HttpResponse::InternalServerError().finish();
@@ -146,7 +160,7 @@ async fn add_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
 
 #[delete("/delete_favorite")]
 async fn delete_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
-    if let Ok(login) = UserFavorite::delete(favorite.into_inner()) {
+    if let Ok(_login) = UserFavorite::delete(favorite.into_inner()) {
         actix_web::HttpResponse::Ok().finish()
     } else {
         return actix_web::HttpResponse::InternalServerError().finish();
@@ -184,7 +198,7 @@ async fn get_reservations(login: web::Json<UserLogin>) -> impl Responder {
 
 #[post("/reserve")]
 async fn add_reservation(reservation: web::Json<Reservation>) -> impl Responder {
-    if let Ok(login) = Reservation::add(reservation.into_inner()) {
+    if let Ok(_login) = Reservation::add(reservation.into_inner()) {
         actix_web::HttpResponse::Ok().finish()
     } else {
         return actix_web::HttpResponse::InternalServerError().finish();
@@ -193,7 +207,7 @@ async fn add_reservation(reservation: web::Json<Reservation>) -> impl Responder 
 
 #[delete("/delete_reservation")]
 async fn delete_reservation(reservation: web::Json<Reservation>) -> impl Responder {
-    if let Ok(login) = Reservation::delete(reservation.into_inner()) {
+    if let Ok(_login) = Reservation::delete(reservation.into_inner()) {
         actix_web::HttpResponse::Ok().finish()
     } else {
         return actix_web::HttpResponse::InternalServerError().finish();
