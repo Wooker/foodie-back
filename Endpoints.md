@@ -6,43 +6,94 @@ GET /restaurants
 ```
 Data:
 ```json
-[{
-    "address": "Akyrtas street, 1/1",
-    "averagePrice": "10000",
-    "categories": ["Ramen", "Japanese"],
-    "description": "Zina restaurant - \"В гостях у Бабушки Зины\"",
-    "id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
-    "image_url": "http://1140427-ci11141.tw1.ru:8080/images/zina.jpg",
-    "name": "Zina",
-    "openHours": "08:00-24:00"
-}, {
-    "address": "Mangilik el street, 29",
-    "averagePrice": "20000",
-    "categories": ["FastFood"],
-    "description": "Qazaq gourmet restaurant",
-    "id": "344ce739-adb5-41da-8bd2-189db10cad39",
-    "image_url": "http://1140427-ci11141.tw1.ru:8080/images/qazaq_gourmet.jpg",
-    "name": "Qazaq Gourmet",
-    "openHours": "12:00-23:00"
-}, {
-    "address": "Uly dala street, 45",
-    "averagePrice": "4000",
-    "categories": ["Italian", "FastFood"],
-    "description": "Halal restaurant",
-    "id": "4d237a1c-0fd0-4f4a-b395-04b4468ecb14",
-    "image_url": "http://1140427-ci11141.tw1.ru:8080/images/meat_point.png",
-    "name": "Meat point",
-    "openHours": "00:00-24:00"
-}, {
-    "address": "Sarayshik street, 5",
-    "averagePrice": "2500",
-    "categories": [],
-    "description": "Chinese restaurant",
-    "id": "006f41e5-ab90-4e86-9e74-c381e8220919",
-    "image_url": "http://1140427-ci11141.tw1.ru:8080/images/lanzhou.png",
-    "name": "Lanzhou",
-    "openHours": "11:00-23:00"
-}]
+[
+	{
+		"address": "Akyrtas street, 1/1",
+		"categories": [
+			"Ramen",
+			"Japanese"
+		],
+		"coordinate": {
+			"latitude": 20.200000762939453,
+			"longitude": 30.299999237060547
+		},
+		"description": "Zina restaurant - \"В гостях у Бабушки Зины\"",
+		"id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+		"image_url": "http://1385980-ci11141.tw1.ru:8080/images/zina.jpg",
+		"menu_items": [],
+		"name": "Zina",
+		"opening_hours": "08:00-24:00",
+		"price_range": 4
+	},
+	{
+		"address": "Mangilik el street, 29",
+		"categories": [
+			"FastFood"
+		],
+		"coordinate": {
+			"latitude": 30.200000762939453,
+			"longitude": 40.29999923706055
+		},
+		"description": "Qazaq gourmet restaurant",
+		"id": "344ce739-adb5-41da-8bd2-189db10cad39",
+		"image_url": "http://1385980-ci11141.tw1.ru:8080/images/qazaq_gourmet.jpg",
+		"menu_items": [],
+		"name": "Qazaq Gourmet",
+		"opening_hours": "12:00-23:00",
+		"price_range": 4
+	},
+	{
+		"address": "Uly dala street, 45",
+		"categories": [
+			"Italian",
+			"FastFood"
+		],
+		"coordinate": {
+			"latitude": 50.20000076293945,
+			"longitude": 60.29999923706055
+		},
+		"description": "Halal restaurant",
+		"id": "4d237a1c-0fd0-4f4a-b395-04b4468ecb14",
+		"image_url": "http://1385980-ci11141.tw1.ru:8080/images/meat_point.png",
+		"menu_items": [
+			{
+				"id": "a4c5e8cf-71bb-45a6-b963-d043263daa37",
+				"image_url": "http://1385980-ci11141.tw1.ru:8080/images/burger.png",
+				"ingredients": "Beef, salad, red onion, pickles, tomato",
+				"menu_category": "FastFood",
+				"name": "Hamburger",
+				"price": 2600
+			}
+		],
+		"name": "Meat point",
+		"opening_hours": "00:00-24:00",
+		"price_range": 3
+	},
+	{
+		"address": "Sarayshik street, 5",
+		"categories": [],
+		"coordinate": {
+			"latitude": 50.20000076293945,
+			"longitude": 60.29999923706055
+		},
+		"description": "Chinese restaurant",
+		"id": "006f41e5-ab90-4e86-9e74-c381e8220919",
+		"image_url": "http://1385980-ci11141.tw1.ru:8080/images/lanzhou.png",
+		"menu_items": [
+			{
+				"id": "54f14dbc-b1ca-49de-9dd8-c276b2cdced6",
+				"image_url": "http://1385980-ci11141.tw1.ru:8080/images/Noodles.jpg",
+				"ingredients": "Noodles, beef, onion, egg, soup",
+				"menu_category": "Ramen",
+				"name": "Noodles",
+				"price": 2000
+			}
+		],
+		"name": "Lanzhou",
+		"opening_hours": "11:00-23:00",
+		"price_range": 3
+	}
+]
 ```
 
 ---
