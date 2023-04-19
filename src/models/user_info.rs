@@ -2,6 +2,7 @@
 
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 use crate::{db::connection, errors::CustomError, schema::user_info, schema::user_info::dsl::*};
 
@@ -20,6 +21,13 @@ pub struct UserInfo {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserLogin {
     login: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserReservation {
+    pub login: String,
+    pub reservation_id: Uuid,
+    pub table_id: Uuid,
 }
 
 impl UserLogin {

@@ -39,7 +39,7 @@ impl RestaurantInfo {
         Ok(restaurants)
     }
 
-    pub fn get(search_id: Uuid) -> Result<RestaurantInfo, CustomError> {
+    pub fn get(search_id: &Uuid) -> Result<RestaurantInfo, CustomError> {
         let mut conn = connection()?;
         let restaurants = restaurant_info
             .get_results::<RestaurantInfo>(&mut conn)

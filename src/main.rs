@@ -13,7 +13,9 @@ mod schema;
 
 use crate::{
     errors::CustomError,
-    models::{menu_item::MenuItem, restaurant_table::RestaurantTable},
+    models::{
+        menu_item::MenuItem, reservations::ReservationMask, restaurant_table::RestaurantTable,
+    },
     schema::restaurant_category,
 };
 
@@ -25,7 +27,7 @@ use models::{
     restaurant_info::RestaurantInfo,
     restaurant_info::RestaurantLocation,
     types::{CategoryType, Location},
-    user_info::{UserInfo, UserLogin},
+    user_info::{UserInfo, UserLogin, UserReservation},
 };
 
 #[get("/shirin")]
@@ -170,7 +172,7 @@ async fn delete_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
 #[get("{restaurant_id}/tables")]
 async fn get_tables(path: web::Path<(Uuid,)>) -> impl Responder {
     let restaurant_id = path.into_inner().0;
-    if let Ok(restaurant) = RestaurantInfo::get(restaurant_id) {
+    if let Ok(restaurant) = RestaurantInfo::get(&restaurant_id) {
         let tables = RestaurantTable::of_restaurant(&restaurant).unwrap();
         let result = serde_json::to_value(tables).unwrap();
         actix_web::HttpResponse::Ok().json(result)
@@ -187,8 +189,8 @@ async fn get_reservations(login: web::Json<UserLogin>) -> impl Responder {
         for (i, reservation) in data.iter().enumerate() {
             result.as_array_mut().unwrap().push(serde_json::json!({}));
 
-            result[i]["restaurant_id"] = serde_json::to_value(reservation.0).unwrap();
-            result[i]["table_id"] = serde_json::to_value(reservation.1).unwrap();
+            result[i]["restaurant"] = serde_json::to_value(&reservation.0).unwrap();
+            result[i]["reservation"] = serde_json::to_value(&reservation.1).unwrap();
         }
         actix_web::HttpResponse::Ok().json(result)
     } else {
@@ -197,20 +199,28 @@ async fn get_reservations(login: web::Json<UserLogin>) -> impl Responder {
 }
 
 #[post("/reserve")]
-async fn add_reservation(reservation: web::Json<Reservation>) -> impl Responder {
-    if let Ok(_login) = Reservation::add(reservation.into_inner()) {
+async fn add_reservation(reservation: web::Json<ReservationMask>) -> impl Responder {
+    let reservation = reservation.into_inner();
+    if let Ok(_login) = Reservation::add(Reservation::new(reservation)) {
         actix_web::HttpResponse::Ok().finish()
     } else {
-        return actix_web::HttpResponse::InternalServerError().finish();
+        let json = serde_json::json!({
+            "message": "Could not create the reservation"
+        });
+        return actix_web::HttpResponse::InternalServerError().json(json);
     }
 }
 
 #[delete("/delete_reservation")]
-async fn delete_reservation(reservation: web::Json<Reservation>) -> impl Responder {
-    if let Ok(_login) = Reservation::delete(reservation.into_inner()) {
-        actix_web::HttpResponse::Ok().finish()
-    } else {
-        return actix_web::HttpResponse::InternalServerError().finish();
+async fn delete_reservation(reservation: web::Json<UserReservation>) -> impl Responder {
+    match Reservation::delete(reservation.into_inner()) {
+        Ok(_login) => actix_web::HttpResponse::Ok().finish(),
+        Err(e) => {
+            let json = serde_json::json!({
+                "message": e.to_string()
+            });
+            actix_web::HttpResponse::InternalServerError().json(json)
+        }
     }
 }
 
@@ -220,6 +230,12 @@ async fn main() -> Result<(), CustomError> {
 
     db::init()?;
     env_logger::init_from_env(Env::default().default_filter_or("info"));
+
+    let d = chrono::NaiveDate::from_ymd(2015, 6, 3);
+    let t = chrono::NaiveTime::from_hms_milli(12, 34, 56, 789);
+
+    let dt = chrono::NaiveDateTime::new(d, t);
+    println!("{:?}", serde_json::to_value(dt).unwrap());
 
     HttpServer::new(|| {
         App::new()

@@ -12,11 +12,10 @@ use crate::{
 
 #[derive(Debug, Serialize, Associations, Identifiable, Deserialize, Selectable, Queryable)]
 #[diesel(belongs_to(RestaurantInfo))]
-#[diesel(primary_key(restaurant_info_id, table_id))]
 #[diesel(table_name = restaurant_tables)]
 pub struct RestaurantTable {
-    restaurant_info_id: Uuid,
-    table_id: i16,
+    pub restaurant_info_id: Uuid,
+    pub id: Uuid,
     seats: i16,
     status: TableStatus,
 }
@@ -24,8 +23,9 @@ pub struct RestaurantTable {
 impl RestaurantTable {
     pub fn of_restaurant(restaurant: &RestaurantInfo) -> Result<Vec<RestaurantTable>, CustomError> {
         let mut conn = connection()?;
+
         let tables: Vec<RestaurantTable> = RestaurantTable::belonging_to(restaurant)
-            .select((restaurant_info_id, table_id, seats, status))
+            .select(RestaurantTable::as_select())
             .load(&mut conn)?;
 
         Ok(tables)

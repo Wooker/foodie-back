@@ -8,4 +8,6 @@ pub enum CustomError {
     IO(#[from] std::io::Error),
     #[error("Wrong password")]
     PasswordMismatch,
+    #[error("Not Found")]
+    NotFound,
 }

@@ -18,10 +18,13 @@ diesel::table! {
 }
 
 diesel::table! {
-    reservations (restaurant_info_id, table_id, user_id) {
-        restaurant_info_id -> Uuid,
-        table_id -> Int2,
+    reservations (id) {
+        id -> Uuid,
+        table_id -> Uuid,
         user_id -> Varchar,
+        reservation_start -> Timestamp,
+        reservation_end -> Timestamp,
+        personas -> Int2,
     }
 }
 
@@ -91,9 +94,9 @@ diesel::table! {
     use diesel::sql_types::*;
     use super::sql_types::Tablestatus;
 
-    restaurant_tables (restaurant_info_id, table_id) {
+    restaurant_tables (id) {
+        id -> Uuid,
         restaurant_info_id -> Uuid,
-        table_id -> Int2,
         seats -> Int2,
         status -> Tablestatus,
     }
@@ -124,6 +127,7 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(reservations -> restaurant_tables (table_id));
 diesel::joinable!(reservations -> user_info (user_id));
 diesel::joinable!(restaurant_category -> restaurant_info (restaurant_info_id));
 diesel::joinable!(restaurant_city -> city (city_id));

@@ -6,6 +6,7 @@ use uuid::Uuid;
 
 use crate::{
     db::connection, errors::CustomError, schema::user_favorites, schema::user_favorites::dsl::*,
+    RestaurantInfo,
 };
 
 #[derive(Debug, Clone, Serialize, Deserialize, Insertable, Queryable, Selectable)]
@@ -26,13 +27,18 @@ impl UserFavorite {
         self.restaurant_info_id
     }
 
-    pub fn get_all(login: &String) -> Result<Vec<Uuid>, CustomError> {
+    pub fn get_all(login: &String) -> Result<Vec<RestaurantInfo>, CustomError> {
         let mut conn = connection()?;
-        let result = user_favorites
+        let ids = user_favorites
             .filter(user_info_id.eq(login))
             .select(restaurant_info_id)
             .load::<Uuid>(&mut conn)
             .unwrap();
+
+        let mut result = vec![];
+        for id in ids.iter() {
+            result.push(RestaurantInfo::get(id)?);
+        }
 
         Ok(result)
     }
