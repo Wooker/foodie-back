@@ -13,8 +13,11 @@ pub struct UserInfo {
     id: String,
     #[serde(rename = "password")]
     password: Option<String>,
+    #[serde(skip_deserializing)]
     full_name: String,
+    #[serde(skip_deserializing)]
     phone_number: String,
+    #[serde(skip_deserializing)]
     image_url: String,
 }
 
