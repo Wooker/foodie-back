@@ -345,7 +345,8 @@ Body:
 	"login": "user1",
 	"reservation_id": "73a829d5-dc3b-4d2a-b95f-93f13b25c9c2",
 	"table_id": "32569054-c18a-4815-8b0b-1f3d33472ecc"
-}```
+}
+```
 Response: 200 OK
 
 ---
@@ -363,8 +364,25 @@ Response:
 ```json
 [
 	{
-		"restaurant_id": "006f41e5-ab90-4e86-9e74-c381e8220919",
-		"table_id": 1
+		"reservation": {
+			"id": "634a1120-9f76-485a-ab18-3cfaf3093225",
+			"personas": 3,
+			"reservation_end": "2015-06-03T20:00:00.789",
+			"reservation_start": "2015-06-03T18:00:00.789",
+			"table_id": "a7ea93ca-1514-457b-87a2-3da73a48cade",
+			"user_id": "user1"
+		},
+		"restaurant": {
+			"address": "Akyrtas street, 1/1",
+			"contact": "+7(777)123-45-67",
+			"description": "Zina restaurant - \"В гостях у Бабушки Зины\"",
+			"id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+			"image_url": "http://1385980-ci11141.tw1.ru:8080/images/zina.jpg",
+			"name": "Zina",
+			"opening_hours": "08:00-24:00",
+			"price_range": 4,
+			"rating": 4.320000171661377
+		}
 	}
 ]
 ```
