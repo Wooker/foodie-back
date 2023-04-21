@@ -1,4 +1,5 @@
 use actix_web::{delete, post, web, Responder};
+use serde_json::json;
 
 use crate::{
     models::{favorites::UserFavorite, user_info::UserLogin},
@@ -18,7 +19,7 @@ async fn get_favorites(login: web::Json<UserLogin>) -> impl Responder {
 #[post("/favorite")]
 async fn add_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
     if let Ok(_login) = UserFavorite::add(favorite.into_inner()) {
-        actix_web::HttpResponse::Ok().finish()
+        actix_web::HttpResponse::Ok().json(json!({"message": "ok"}))
     } else {
         return actix_web::HttpResponse::InternalServerError().finish();
     }
@@ -27,7 +28,7 @@ async fn add_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
 #[delete("/delete_favorite")]
 async fn delete_favorite(favorite: web::Json<UserFavorite>) -> impl Responder {
     if let Ok(_login) = UserFavorite::delete(favorite.into_inner()) {
-        actix_web::HttpResponse::Ok().finish()
+        actix_web::HttpResponse::Ok().json(json!({"message": "ok"}))
     } else {
         return actix_web::HttpResponse::InternalServerError().finish();
     }

@@ -29,7 +29,7 @@ async fn get_reservations(login: web::Json<UserLogin>) -> impl Responder {
 async fn add_reservation(reservation: web::Json<ReservationMask>) -> impl Responder {
     let reservation = reservation.into_inner();
     if let Ok(_login) = Reservation::add(Reservation::new(reservation)) {
-        actix_web::HttpResponse::Ok().finish()
+        actix_web::HttpResponse::Ok().json(json!({"message": "ok"}))
     } else {
         let json = serde_json::json!({
             "message": "Could not create the reservation"
@@ -41,7 +41,7 @@ async fn add_reservation(reservation: web::Json<ReservationMask>) -> impl Respon
 #[delete("/delete_reservation")]
 async fn delete_reservation(reservation: web::Json<UserReservation>) -> impl Responder {
     match Reservation::delete(reservation.into_inner()) {
-        Ok(_login) => actix_web::HttpResponse::Ok().finish(),
+        Ok(_login) => actix_web::HttpResponse::Ok().json(json!({"message": "ok"})),
         Err(e) => {
             let json = serde_json::json!({
                 "message": e.to_string()
