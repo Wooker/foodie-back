@@ -21,12 +21,13 @@ use crate::{
 pub struct RestaurantCategory {
     restaurant_info_id: Uuid,
     category_type: CategoryType,
+    image_url: String,
 }
 
 impl RestaurantCategory {
     pub fn get_all() -> Result<
         HashMap<
-            CategoryType,
+            (CategoryType, String),
             Vec<(
                 RestaurantInfo,
                 Vec<CategoryType>,
@@ -38,7 +39,7 @@ impl RestaurantCategory {
     > {
         let mut conn = connection()?;
         let mut categories: HashMap<
-            CategoryType,
+            (CategoryType, String),
             Vec<(
                 RestaurantInfo,
                 Vec<CategoryType>,
@@ -48,7 +49,7 @@ impl RestaurantCategory {
         > = HashMap::new();
 
         for category in CategoryType::iter() {
-            let cats_ids = restaurant_category::table
+            let cats_ids: Vec<(RestaurantCategory, Uuid)> = restaurant_category::table
                 .inner_join(restaurant_info::table)
                 .filter(restaurant_category::category_type.eq(category))
                 .select((RestaurantCategory::as_select(), restaurant_info::id))
@@ -60,7 +61,7 @@ impl RestaurantCategory {
             }
 
             categories.insert(
-                category,
+                (category, cats_ids[0].0.image_url.clone()),
                 restaurants, //ids.into_iter().map(|result_join| result_join.1).collect(),
             );
         }

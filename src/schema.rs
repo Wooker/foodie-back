@@ -35,6 +35,7 @@ diesel::table! {
     restaurant_category (restaurant_info_id, category_type) {
         restaurant_info_id -> Uuid,
         category_type -> Category,
+        image_url -> Text,
     }
 }
 

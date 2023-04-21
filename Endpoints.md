@@ -174,57 +174,8 @@ Data:
 ```json
 [
 	{
-		"category": "Ramen",
-		"restaurants": [
-			{
-				"address": "Akyrtas street, 1/1",
-				"categories": [
-					"Ramen",
-					"Japanese"
-				],
-				"contact": "+7(777)123-45-67",
-				"description": "Zina restaurant - \"В гостях у Бабушки Зины\"",
-				"id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
-				"image_url": "http://1385980-ci11141.tw1.ru:8080/images/zina.jpg",
-				"location": {
-					"latitude": 20.200000762939453,
-					"longitude": 30.299999237060547
-				},
-				"menu": [],
-				"name": "Zina",
-				"opening_hours": "08:00-24:00",
-				"price_range": 4,
-				"rating": 4.320000171661377
-			}
-		]
-	},
-	{
-		"category": "Japanese",
-		"restaurants": [
-			{
-				"address": "Akyrtas street, 1/1",
-				"categories": [
-					"Ramen",
-					"Japanese"
-				],
-				"contact": "+7(777)123-45-67",
-				"description": "Zina restaurant - \"В гостях у Бабушки Зины\"",
-				"id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
-				"image_url": "http://1385980-ci11141.tw1.ru:8080/images/zina.jpg",
-				"location": {
-					"latitude": 20.200000762939453,
-					"longitude": 30.299999237060547
-				},
-				"menu": [],
-				"name": "Zina",
-				"opening_hours": "08:00-24:00",
-				"price_range": 4,
-				"rating": 4.320000171661377
-			}
-		]
-	},
-	{
 		"category": "FastFood",
+		"image_url": "http://1385980-ci11141.tw1.ru:8080/images/fastfood_category.jpg",
 		"restaurants": [
 			{
 				"address": "Mangilik el street, 29",
@@ -261,7 +212,7 @@ Data:
 				},
 				"menu": [
 					{
-						"id": "371e9375-6205-47f1-b64c-08ab5733a75f",
+						"id": "f7e9ec4b-16cf-4baf-9d16-0c56af28b2ae",
 						"image_url": "http://1385980-ci11141.tw1.ru:8080/images/burger.png",
 						"ingredients": "Beef, salad, red onion, pickles, tomato",
 						"menu_category": "FastFood",
@@ -277,7 +228,34 @@ Data:
 		]
 	},
 	{
+		"category": "Ramen",
+		"image_url": "http://1385980-ci11141.tw1.ru:8080/images/ramen_category.jpg",
+		"restaurants": [
+			{
+				"address": "Akyrtas street, 1/1",
+				"categories": [
+					"Ramen",
+					"Japanese"
+				],
+				"contact": "+7(777)123-45-67",
+				"description": "Zina restaurant - \"В гостях у Бабушки Зины\"",
+				"id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+				"image_url": "http://1385980-ci11141.tw1.ru:8080/images/zina.jpg",
+				"location": {
+					"latitude": 20.200000762939453,
+					"longitude": 30.299999237060547
+				},
+				"menu": [],
+				"name": "Zina",
+				"opening_hours": "08:00-24:00",
+				"price_range": 4,
+				"rating": 4.320000171661377
+			}
+		]
+	},
+	{
 		"category": "Italian",
+		"image_url": "http://1385980-ci11141.tw1.ru:8080/images/italian_category.jpg",
 		"restaurants": [
 			{
 				"address": "Uly dala street, 45",
@@ -295,7 +273,7 @@ Data:
 				},
 				"menu": [
 					{
-						"id": "371e9375-6205-47f1-b64c-08ab5733a75f",
+						"id": "f7e9ec4b-16cf-4baf-9d16-0c56af28b2ae",
 						"image_url": "http://1385980-ci11141.tw1.ru:8080/images/burger.png",
 						"ingredients": "Beef, salad, red onion, pickles, tomato",
 						"menu_category": "FastFood",
@@ -307,6 +285,32 @@ Data:
 				"opening_hours": "00:00-24:00",
 				"price_range": 3,
 				"rating": 4.190000057220459
+			}
+		]
+	},
+	{
+		"category": "Japanese",
+		"image_url": "http://1385980-ci11141.tw1.ru:8080/images/japanese_category.jpg",
+		"restaurants": [
+			{
+				"address": "Akyrtas street, 1/1",
+				"categories": [
+					"Ramen",
+					"Japanese"
+				],
+				"contact": "+7(777)123-45-67",
+				"description": "Zina restaurant - \"В гостях у Бабушки Зины\"",
+				"id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
+				"image_url": "http://1385980-ci11141.tw1.ru:8080/images/zina.jpg",
+				"location": {
+					"latitude": 20.200000762939453,
+					"longitude": 30.299999237060547
+				},
+				"menu": [],
+				"name": "Zina",
+				"opening_hours": "08:00-24:00",
+				"price_range": 4,
+				"rating": 4.320000171661377
 			}
 		]
 	}

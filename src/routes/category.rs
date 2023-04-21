@@ -12,7 +12,8 @@ async fn categories() -> impl Responder {
         let restaurants_json = restaurants_to_value(restaurants);
 
         json.push(json!({
-            "category": category,
+            "category": category.0,
+            "image_url": category.1,
             "restaurants": restaurants_json
         }));
     }
