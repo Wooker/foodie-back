@@ -62,7 +62,7 @@ Data:
 		},
 		"menu": [
 			{
-				"id": "371e9375-6205-47f1-b64c-08ab5733a75f",
+				"id": "7e4d2d2d-f1e9-406e-92fe-93d48ccd23ab",
 				"image_url": "http://1385980-ci11141.tw1.ru:8080/images/burger.png",
 				"ingredients": "Beef, salad, red onion, pickles, tomato",
 				"menu_category": "FastFood",
@@ -88,7 +88,7 @@ Data:
 		},
 		"menu": [
 			{
-				"id": "aee9b8f8-48da-4925-a7bd-3bb7603ccad1",
+				"id": "03c972a3-d985-423a-ab34-848555d25e45",
 				"image_url": "http://1385980-ci11141.tw1.ru:8080/images/Noodles.jpg",
 				"ingredients": "Noodles, beef, onion, egg, soup",
 				"menu_category": "Ramen",
@@ -381,7 +381,7 @@ Data:
 		},
 		"menu": [
 			{
-				"id": "371e9375-6205-47f1-b64c-08ab5733a75f",
+				"id": "7e4d2d2d-f1e9-406e-92fe-93d48ccd23ab",
 				"image_url": "http://1385980-ci11141.tw1.ru:8080/images/burger.png",
 				"ingredients": "Beef, salad, red onion, pickles, tomato",
 				"menu_category": "FastFood",
@@ -407,7 +407,7 @@ Data:
 		},
 		"menu": [
 			{
-				"id": "aee9b8f8-48da-4925-a7bd-3bb7603ccad1",
+				"id": "03c972a3-d985-423a-ab34-848555d25e45",
 				"image_url": "http://1385980-ci11141.tw1.ru:8080/images/Noodles.jpg",
 				"ingredients": "Noodles, beef, onion, egg, soup",
 				"menu_category": "Ramen",
@@ -498,9 +498,11 @@ Response:
 	}
 ]
 ```
+
 ---
 
 ## Reservation
+
 ```txt
 POST /reserve
 ```
@@ -520,8 +522,6 @@ Response:
 	"message": "ok"
 }
 ```
-
-
 ---
 
 ```txt
@@ -557,11 +557,11 @@ Response:
 [
 	{
 		"reservation": {
-			"id": "8313b249-b355-4dcf-b536-b70b0dd7b417",
-			"personas": 3,
+			"id": "b021e5ad-1448-490e-98ec-605a69c484f9",
+			"personas": 2,
 			"reservation_end": "2015-06-03T20:00:00.789",
 			"reservation_start": "2015-06-03T18:00:00.789",
-			"table_id": "42c35e08-028a-41c7-81cd-3abb3f6b83da",
+			"table_id": "ae345dc4-e181-4747-a964-f28cd98a20cd",
 			"user_id": "user1"
 		},
 		"restaurant": {
@@ -590,6 +590,7 @@ Response:
 ---
 
 ## Tables
+
 ```txt
 GET /{restaurant_id}/tables
 ```
@@ -597,28 +598,28 @@ Response:
 ```json
 [
 	{
+		"id": "0657b480-9484-4a4e-8f92-13b9193911d2",
 		"restaurant_info_id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
 		"seats": 2,
-		"status": "Occupied",
-		"table_id": 1
+		"status": "Free"
 	},
 	{
+		"id": "dc08149a-6fc5-4373-9464-037ec7a4ab3c",
 		"restaurant_info_id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
 		"seats": 2,
-		"status": "Occupied",
-		"table_id": 2
+		"status": "Free"
 	},
 	{
+		"id": "f685aa62-66fa-4fb7-8065-8cb531a318e3",
 		"restaurant_info_id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
 		"seats": 4,
-		"status": "Free",
-		"table_id": 3
+		"status": "Free"
 	},
 	{
+		"id": "ae345dc4-e181-4747-a964-f28cd98a20cd",
 		"restaurant_info_id": "85d436f9-3500-4a4b-abea-840fd5e044ec",
 		"seats": 2,
-		"status": "Occupied",
-		"table_id": 4
+		"status": "Occupied"
 	}
 ]
 ```
