@@ -436,7 +436,12 @@ Body:
 	"restaurant_id": "006f41e5-ab90-4e86-9e74-c381e8220919"
 }
 ```
-Response: 200 OK
+Response:
+```json
+{
+	"message": "ok"
+}
+```
 
 ---
 
@@ -450,7 +455,12 @@ Body:
 	"restaurant_id": "006f41e5-ab90-4e86-9e74-c381e8220919"
 }
 ```
-Response: 200 OK
+Response:
+```json
+{
+	"message": "ok"
+}
+```
 
 ---
 
@@ -504,7 +514,13 @@ Body:
 	"reservation_end": "2015-06-03T20:00:00.789"
 }
 ```
-Response: 200 OK
+Response:
+```json
+{
+	"message": "ok"
+}
+```
+
 
 ---
 
@@ -518,7 +534,12 @@ Body:
 	"reservation_id": "73a829d5-dc3b-4d2a-b95f-93f13b25c9c2",
 	"table_id": "32569054-c18a-4815-8b0b-1f3d33472ecc"
 }```
-Response: 200 OK
+Response:
+```json
+{
+	"message": "ok"
+}
+```
 
 ---
 
