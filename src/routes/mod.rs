@@ -29,7 +29,15 @@ pub fn restaurant_to_value(
 ) -> Value {
     let mut result = json!({});
 
-    result["info"] = serde_json::to_value(info).unwrap();
+    result["id"] = serde_json::to_value(info.id.clone()).unwrap();
+    result["address"] = serde_json::to_value(info.address.clone()).unwrap();
+    result["contact"] = serde_json::to_value(info.contact.clone()).unwrap();
+    result["description"] = serde_json::to_value(info.description.clone()).unwrap();
+    result["image_url"] = serde_json::to_value(info.image_url.clone()).unwrap();
+    result["name"] = serde_json::to_value(info.name.clone()).unwrap();
+    result["opening_hours"] = serde_json::to_value(info.opening_hours.clone()).unwrap();
+    result["price_range"] = serde_json::to_value(info.price_range.clone()).unwrap();
+    result["rating"] = serde_json::to_value(info.rating.clone()).unwrap();
     result["categories"] = serde_json::to_value(categories).unwrap();
     result["menu"] = serde_json::to_value(menu).unwrap();
     result["location"] = serde_json::to_value(location).unwrap();
