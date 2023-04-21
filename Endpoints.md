@@ -427,7 +427,7 @@ Data:
 
 ## Favorites
 ```txt
-POST /add_favorite
+POST /favorite
 ```
 Body:
 ```json
