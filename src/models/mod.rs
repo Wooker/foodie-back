@@ -4,6 +4,7 @@ pub mod menu_item;
 pub mod reservations;
 pub mod restaurant_category;
 pub mod restaurant_info;
+pub mod restaurant_location;
 pub mod restaurant_table;
 pub mod types;
 pub mod user_info;

@@ -14,9 +14,9 @@ CREATE TABLE "restaurant_info" (
 
 CREATE TABLE "restaurant_location" (
   "restaurant_info_id" uuid,
-  "longitude" float4,
-  "latitude" float4,
-  PRIMARY KEY ("restaurant_info_id", "longitude", "latitude")
+  "longitude" float4 NOT NULL,
+  "latitude" float4 NOT NULL,
+  PRIMARY KEY ("restaurant_info_id")
 );
 
 ALTER TABLE "restaurant_location" ADD FOREIGN KEY ("restaurant_info_id") REFERENCES "restaurant_info" ("id");

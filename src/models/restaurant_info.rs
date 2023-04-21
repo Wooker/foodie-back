@@ -2,13 +2,17 @@
 
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
-use std::cmp::Ordering;
 use uuid::Uuid;
 
 use crate::{
-    db::connection, errors::CustomError, schema::restaurant_info, schema::restaurant_info::dsl::*,
-    schema::restaurant_location,
+    db::connection,
+    errors::CustomError,
+    models::{
+        menu_item::MenuItem, restaurant_category::RestaurantCategory,
+        restaurant_location::RestaurantLocation, types::CategoryType,
+    },
+    schema::restaurant_info,
+    schema::restaurant_info::dsl::*,
 };
 
 #[derive(Debug, PartialEq, Identifiable, Selectable, Serialize, Deserialize, Queryable)]
@@ -30,16 +34,27 @@ impl RestaurantInfo {
         &self.id
     }
 
-    pub fn get_all() -> Result<Vec<RestaurantInfo>, CustomError> {
+    pub fn get_all_ids() -> Result<Vec<Uuid>, CustomError> {
         let mut conn = connection()?;
-        let restaurants = restaurant_info
-            .get_results::<RestaurantInfo>(&mut conn)
+        let ids = restaurant_info
+            .select(restaurant_info::id)
+            .get_results::<Uuid>(&mut conn)
             .unwrap();
 
-        Ok(restaurants)
+        Ok(ids)
     }
 
-    pub fn get(search_id: &Uuid) -> Result<RestaurantInfo, CustomError> {
+    pub fn get(
+        search_id: &Uuid,
+    ) -> Result<
+        (
+            RestaurantInfo,
+            Vec<CategoryType>,
+            Vec<MenuItem>,
+            RestaurantLocation,
+        ),
+        CustomError,
+    > {
         let mut conn = connection()?;
         let restaurants = restaurant_info
             .get_results::<RestaurantInfo>(&mut conn)
@@ -50,75 +65,10 @@ impl RestaurantInfo {
             .find(|i| i.get_id().eq(&search_id))
             .unwrap();
 
-        Ok(restaurant)
-    }
-}
+        let categories = RestaurantCategory::of_restaurant(&restaurant)?;
+        let menu: Vec<MenuItem> = MenuItem::of_restaurant(&restaurant)?;
+        let location: RestaurantLocation = RestaurantLocation::of_restaurant(&restaurant)?;
 
-#[derive(Debug, Serialize, Associations, Deserialize, Selectable, Queryable)]
-#[diesel(belongs_to(RestaurantInfo))]
-#[diesel(primary_key(restaurant_info_id, latitude, longitude))]
-#[diesel(table_name = restaurant_location)]
-pub struct RestaurantLocation {
-    #[serde(skip)]
-    restaurant_info_id: Uuid,
-    latitude: f32,
-    longitude: f32,
-}
-
-impl RestaurantLocation {
-    pub fn of_restaurant(other_id: &Uuid) -> Result<Self, CustomError> {
-        let mut conn = connection()?;
-        let location: RestaurantLocation = restaurant_location::table
-            .filter(restaurant_location::restaurant_info_id.eq(other_id))
-            .select((
-                restaurant_location::restaurant_info_id,
-                restaurant_location::longitude,
-                restaurant_location::latitude,
-            ))
-            .first(&mut conn)?;
-
-        Ok(location)
-    }
-
-    pub fn by_nearest_to(some_longitude: f32, some_latitude: f32) -> Result<Value, CustomError> {
-        let mut conn = connection()?;
-
-        let mut all_restaurants = restaurant_location::table
-            .inner_join(restaurant_info::table)
-            .select((RestaurantLocation::as_select(), RestaurantInfo::as_select()))
-            .load::<(RestaurantLocation, RestaurantInfo)>(&mut conn)?;
-
-        all_restaurants.sort_by(|a, b| {
-            let distance_a = f32::sqrt(
-                (some_longitude - a.0.longitude).powf(2.0)
-                    + (some_latitude - a.0.latitude).powf(2.0),
-            );
-            let distance_b = f32::sqrt(
-                (some_longitude - b.0.longitude).powf(2.0)
-                    + (some_latitude - b.0.latitude).powf(2.0),
-            );
-
-            if distance_a < distance_b {
-                Ordering::Less
-            } else if distance_a == distance_b {
-                Ordering::Equal
-            } else {
-                Ordering::Greater
-            }
-        });
-        let a = all_restaurants
-            .iter()
-            .map(|r| {
-                serde_json::json!({
-                    "location": {
-                        "longitude": r.0.longitude,
-                        "latitude": r.0.latitude
-                    },
-                    "restaurant": r.1
-                })
-            })
-            .collect::<serde_json::Value>();
-
-        Ok(serde_json::to_value(a).unwrap())
+        Ok((restaurant, categories, menu, location))
     }
 }

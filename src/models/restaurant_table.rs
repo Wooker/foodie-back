@@ -7,7 +7,6 @@ use crate::{
     errors::CustomError,
     models::{restaurant_info::RestaurantInfo, types::TableStatus},
     schema::restaurant_tables,
-    schema::restaurant_tables::dsl::*,
 };
 
 #[derive(Debug, Serialize, Associations, Identifiable, Deserialize, Selectable, Queryable)]

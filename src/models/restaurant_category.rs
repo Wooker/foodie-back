@@ -1,13 +1,17 @@
-#![allow(non_snake_case)]
-
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use uuid::Uuid;
 
 use crate::{
-    db::connection, errors::CustomError, models::types::CategoryType, schema::restaurant_category,
-    schema::restaurant_info, RestaurantInfo,
+    db::connection,
+    errors::CustomError,
+    models::{
+        menu_item::MenuItem, restaurant_info::RestaurantInfo,
+        restaurant_location::RestaurantLocation, types::CategoryType,
+    },
+    schema::restaurant_category,
+    schema::restaurant_info,
 };
 
 #[derive(Debug, Serialize, Associations, Identifiable, Deserialize, Selectable, Queryable)]
@@ -20,32 +24,56 @@ pub struct RestaurantCategory {
 }
 
 impl RestaurantCategory {
-    pub fn get_all() -> Result<HashMap<CategoryType, Vec<RestaurantInfo>>, CustomError> {
+    pub fn get_all() -> Result<
+        HashMap<
+            CategoryType,
+            Vec<(
+                RestaurantInfo,
+                Vec<CategoryType>,
+                Vec<MenuItem>,
+                RestaurantLocation,
+            )>,
+        >,
+        CustomError,
+    > {
         let mut conn = connection()?;
-        let mut categories: HashMap<CategoryType, Vec<RestaurantInfo>> = HashMap::new();
+        let mut categories: HashMap<
+            CategoryType,
+            Vec<(
+                RestaurantInfo,
+                Vec<CategoryType>,
+                Vec<MenuItem>,
+                RestaurantLocation,
+            )>,
+        > = HashMap::new();
 
         for category in CategoryType::iter() {
-            let ids = restaurant_category::table
+            let cats_ids = restaurant_category::table
                 .inner_join(restaurant_info::table)
-                .filter(restaurant_category::category_type.eq(category)) //.get_results::<RestaurantCategory>(&mut conn)?;
-                .select((RestaurantCategory::as_select(), RestaurantInfo::as_select()))
-                .load::<(RestaurantCategory, RestaurantInfo)>(&mut conn)?;
+                .filter(restaurant_category::category_type.eq(category))
+                .select((RestaurantCategory::as_select(), restaurant_info::id))
+                .load::<(RestaurantCategory, Uuid)>(&mut conn)?;
+
+            let mut restaurants = vec![];
+            for cat_id in cats_ids.iter() {
+                restaurants.push(RestaurantInfo::get(&cat_id.1).unwrap())
+            }
 
             categories.insert(
                 category,
-                ids.into_iter().map(|result_join| result_join.1).collect(),
+                restaurants, //ids.into_iter().map(|result_join| result_join.1).collect(),
             );
         }
 
         Ok(categories)
     }
 
-    pub fn of_restaurant(other_id: &Uuid) -> Result<Vec<CategoryType>, CustomError> {
+    pub fn of_restaurant(restaurant: &RestaurantInfo) -> Result<Vec<CategoryType>, CustomError> {
         let mut conn = connection()?;
-        let categories: Vec<CategoryType> = restaurant_category::table
-            .filter(restaurant_category::restaurant_info_id.eq(other_id))
+
+        let categories: Vec<CategoryType> = RestaurantCategory::belonging_to(restaurant)
             .select(restaurant_category::category_type)
-            .load::<CategoryType>(&mut conn)
+            .load(&mut conn)
             .unwrap();
 
         Ok(categories)

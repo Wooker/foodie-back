@@ -1,20 +1,18 @@
 use crate::{
     db::connection,
     errors::CustomError,
+    models::{
+        menu_item::MenuItem, restaurant_info::RestaurantInfo,
+        restaurant_location::RestaurantLocation, restaurant_table::RestaurantTable, types::*,
+        user_info::UserReservation,
+    },
     schema::{reservations, restaurant_tables, restaurant_tables::dsl::*},
-    schema::{reservations::dsl::*, restaurant_info, restaurant_info::dsl::*},
+    schema::{reservations::dsl::*, restaurant_info},
 };
-use chrono::{NaiveDate, NaiveDateTime, NaiveTime};
+use chrono::NaiveDateTime;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
-use std::time::SystemTime;
 use uuid::Uuid;
-
-use super::{
-    restaurant_info::RestaurantInfo, restaurant_table::RestaurantTable, types::TableStatus,
-    user_info::UserReservation,
-};
 
 #[derive(Debug, Clone, Serialize, Deserialize, Insertable, Queryable, Selectable)]
 #[diesel(belongs_to(RestaurantTable))]
@@ -57,34 +55,45 @@ impl Reservation {
         self.table_id
     }
 
-    pub fn get_all(login: &String) -> Result<Vec<(RestaurantInfo, Self)>, CustomError> {
+    pub fn get_all(
+        login: &String,
+    ) -> Result<
+        Vec<(
+            (
+                RestaurantInfo,
+                Vec<CategoryType>,
+                Vec<MenuItem>,
+                RestaurantLocation,
+            ),
+            Self,
+        )>,
+        CustomError,
+    > {
         let mut conn = connection()?;
-        let reservations_results: Vec<Uuid> = reservations
+        let mut restaurant_reservation = vec![];
+
+        let reservations_result: Vec<Reservation> = reservations::table
             .filter(user_id.eq(login))
-            .select(reservations::id)
-            .load::<Uuid>(&mut conn)?;
+            .select(Reservation::as_select())
+            .load::<Reservation>(&mut conn)?;
 
-        let mut output: Vec<(RestaurantInfo, Self)> = vec![];
-        for result in reservations_results {
-            let reservation: Reservation = reservations::table
-                .filter(reservations::id.eq(result))
-                .select(Reservation::as_select())
-                .get_result::<Reservation>(&mut conn)?;
-
+        for reservation in reservations_result {
             let table = restaurant_tables::table
                 .filter(restaurant_tables::id.eq(reservation.table_id))
                 .select(RestaurantTable::as_select())
                 .get_result::<RestaurantTable>(&mut conn)?;
 
-            let restaurant = restaurant_info::table
+            let restaurant_id = restaurant_info::table
                 .filter(restaurant_info::id.eq(table.restaurant_info_id))
-                .select(RestaurantInfo::as_select())
-                .get_result::<RestaurantInfo>(&mut conn)?;
+                .select(restaurant_info::id)
+                .get_result::<Uuid>(&mut conn)?;
 
-            output.push((restaurant, reservation));
+            let restaurant = RestaurantInfo::get(&restaurant_id)?;
+
+            restaurant_reservation.push((restaurant, reservation));
         }
 
-        Ok(output)
+        Ok(restaurant_reservation)
     }
 
     pub fn add(reservation: Reservation) -> Result<(), CustomError> {

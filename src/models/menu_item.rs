@@ -2,7 +2,12 @@ use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::{models::types::CategoryType, schema::restaurant_menu, RestaurantInfo};
+use crate::{
+    db::connection,
+    errors::CustomError,
+    models::{restaurant_info::RestaurantInfo, types::CategoryType},
+    schema::restaurant_menu,
+};
 
 #[derive(
     Debug, PartialEq, Associations, Identifiable, Selectable, Serialize, Deserialize, Queryable,
@@ -21,4 +26,15 @@ pub struct MenuItem {
     image_url: String,
 }
 
-impl MenuItem {}
+impl MenuItem {
+    pub fn of_restaurant(restaurant: &RestaurantInfo) -> Result<Vec<MenuItem>, CustomError> {
+        let mut conn = connection()?;
+
+        let menu: Vec<MenuItem> = MenuItem::belonging_to(&restaurant)
+            .select(MenuItem::as_select())
+            .load(&mut conn)
+            .unwrap();
+
+        Ok(menu)
+    }
+}

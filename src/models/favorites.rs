@@ -5,8 +5,14 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::{
-    db::connection, errors::CustomError, schema::user_favorites, schema::user_favorites::dsl::*,
-    RestaurantInfo,
+    db::connection,
+    errors::CustomError,
+    models::{
+        menu_item::MenuItem, restaurant_info::RestaurantInfo,
+        restaurant_location::RestaurantLocation, types::CategoryType,
+    },
+    schema::user_favorites,
+    schema::user_favorites::dsl::*,
 };
 
 #[derive(Debug, Clone, Serialize, Deserialize, Insertable, Queryable, Selectable)]
@@ -27,7 +33,17 @@ impl UserFavorite {
         self.restaurant_info_id
     }
 
-    pub fn get_all(login: &String) -> Result<Vec<RestaurantInfo>, CustomError> {
+    pub fn get_all(
+        login: &String,
+    ) -> Result<
+        Vec<(
+            RestaurantInfo,
+            Vec<CategoryType>,
+            Vec<MenuItem>,
+            RestaurantLocation,
+        )>,
+        CustomError,
+    > {
         let mut conn = connection()?;
         let ids = user_favorites
             .filter(user_info_id.eq(login))
